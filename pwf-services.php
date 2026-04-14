@@ -47,14 +47,18 @@ class PWFServicesPlugin {
         dbDelta("CREATE TABLE IF NOT EXISTS $this->service_types_table (
             id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
             typename varchar(200) NOT NULL,
+            description varchar(2000),
+            createdby bigint(20) unsigned NOT NULL,
             createdate datetime NOT NULL,
-            PRIMARY KEY  (id)
+            PRIMARY KEY  (id),
+            FOREIGN KEY  (createdby) REFERENCES $this->users_table(id)
         ) $this->charset;");
         dbDelta("CREATE TABLE IF NOT EXISTS $this->services_table (
             id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
             servicename varchar(200) NOT NULL,
             servicedescription varchar(10000) NOT NULL,
             priceballpark varchar(1000),
+            timeframe varchar(1000),
             typeid bigint(20) unsigned NOT NULL,
             providerid bigint(20) unsigned NOT NULL,
             createdate datetime NOT NULL,
@@ -65,12 +69,21 @@ class PWFServicesPlugin {
         dbDelta("CREATE TABLE IF NOT EXISTS $this->categories_table (
             id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
             category_name varchar(200) NOT NULL,
-            category_level bigint(20) unsigned,
+            parent_category bigint(20) unsigned,
             category_description varchar(500),
             createdate datetime NOT NULL,
             createdby bigint(20) unsigned NOT NULL,
             PRIMARY KEY  (id),
             FOREIGN KEY  (createdby) REFERENCES $this->users_table(id)
+        ) $this->charset;");
+        dbDelta("CREATE TABLE IF NOT EXISTS $this->service_categories_table (
+            id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+            serviceid bigint(20) unsigned NOT NULL,
+            categoryid bigint(20) unsigned NOT NULL,
+            createdate datetime NOT NULL,
+            PRIMARY KEY  (id),
+            FOREIGN KEY  (serviceid) REFERENCES $this->services_table(id),
+            FOREIGN KEY  (categoryid) REFERENCES $this->categories_table(id)
         ) $this->charset;");
 
         if (post_exists('Services', '', '', 'page', 'publish') == 0){
