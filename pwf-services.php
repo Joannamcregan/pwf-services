@@ -19,6 +19,8 @@ class PWFServicesPlugin {
         //     'root_url' => get_site_url()
         // ));
         add_action('activate_pwf-services/pwf-services.php', array($this, 'onActivate'));
+        add_action('init', array($this, 'registerScripts'));
+        add_action('wp_enqueue_scripts', array($this, 'pluginFiles'));
         add_filter('template_include', array($this, 'loadTemplate'), 99);
     }
 
@@ -31,6 +33,14 @@ class PWFServicesPlugin {
             'post_type' => 'page'
         );
         wp_insert_post($services_page);
+    }
+
+    function registerScripts(){
+        wp_register_style('pwf-services-styles', plugins_url('css/services.css', __FILE__), false, '1.0', 'all');
+    }
+
+    function pluginFiles(){
+        wp_enqueue_style('pwf-services-styles');
     }
 
     function loadTemplate($template){
