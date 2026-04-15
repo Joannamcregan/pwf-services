@@ -1,7 +1,8 @@
 <?php get_header();
 ?><main class="pwf-services">
     <h1>Search Services</h1>
-    <input type="text" id="pwf-services-search-field"></input><p id="pwf-services-search-submit">submit</p>
+    <input type="text" id="pwf-services-search-field"></input>
+    <p id="pwf-services-search-submit">submit</p>
     <div id="pwf-services-search-results">
         <p>Need something done? Use the power of community to find a trusted freelancer who can do it!</p>
         <p>Want to offer your services?</p>

@@ -41,6 +41,10 @@ class PWFServicesPlugin {
 
     function pluginFiles(){
         wp_enqueue_style('pwf-services-styles');
+        wp_enqueue_script('pwf-services-js', plugin_dir_url(__FILE__) . '/build/index.js', array('jquery'), '1.0', true);
+        wp_localize_script('pwf-services-js', 'pwfData', array(
+            'root_url' => get_site_url()
+        ));
     }
 
     function loadTemplate($template){
@@ -69,6 +73,7 @@ class PWFServicesPlugin {
             servicedescription varchar(10000) NOT NULL,
             priceballpark varchar(1000),
             timeframe varchar(1000),
+            isrequest bit NOT NULL default 0,
             typeid bigint(20) unsigned NOT NULL,
             providerid bigint(20) unsigned NOT NULL,
             createdate datetime NOT NULL,
