@@ -24,3 +24,7 @@ div#pwf-services-search-results{
     padding: 20px;
     margin: 10px auto;
 }
+#pwf-search-term-error{
+    color: rgb(101, 1, 1);
+    text-align: center;
+}

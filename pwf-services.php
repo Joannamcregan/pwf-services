@@ -6,6 +6,9 @@
     Description: Allow freelancers to offer services
 */
 if( ! defined('ABSPATH') ) exit;
+
+require_once plugin_dir_path(__FILE__) . 'inc/pwf-search-route.php';
+
 class PWFServicesPlugin {
     function __construct() {
         global $wpdb;

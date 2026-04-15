@@ -20,6 +20,7 @@ class Search {
     this.servicesSearchField = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-services-search-field');
     this.servicesSearchSubmit = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-services-search-submit');
     this.servicesResultsSection = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-services-search-results');
+    this.servicesSearchTermError = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-search-term-error');
     this.events();
   }
   events() {
@@ -27,7 +28,28 @@ class Search {
   }
   searchServices() {
     let searchTerm = this.servicesSearchField.val();
-    this.servicesResultsSection.html('');
+    this.servicesSearchTermError.addClass('hidden');
+    if (searchTerm.length < 3) {
+      this.servicesSearchTermError.removeClass('hidden');
+    } else {
+      this.servicesResultsSection.html('');
+      jquery__WEBPACK_IMPORTED_MODULE_0___default().ajax({
+        beforeSend: xhr => {
+          xhr.setRequestHeader('X-WP-Nonce', pwfData.nonce);
+        },
+        url: pwfData.root_url + '/wp-json/pwfSearch/v1/serviceSearch',
+        type: 'GET',
+        data: {
+          'searchTerm': searchTerm
+        },
+        success: response => {
+          console.log(response);
+        },
+        error: response => {
+          console.log(response);
+        }
+      });
+    }
   }
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Search);
