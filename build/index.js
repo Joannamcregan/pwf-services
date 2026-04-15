@@ -19,12 +19,15 @@ class Search {
   constructor() {
     this.servicesSearchField = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-services-search-field');
     this.servicesSearchSubmit = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-services-search-submit');
+    this.servicesResultsSection = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-services-search-results');
     this.events();
   }
   events() {
-    this.servicesSearchSubmit.on('click', () => {
-      console.log('searcheddd ittt');
-    });
+    this.servicesSearchSubmit.on('click', this.searchServices.bind(this));
+  }
+  searchServices() {
+    let searchTerm = this.servicesSearchField.val();
+    this.servicesResultsSection.html('');
   }
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Search);

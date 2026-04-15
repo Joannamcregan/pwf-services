@@ -5,7 +5,7 @@
     <p id="pwf-services-search-submit">submit</p>
     <div id="pwf-services-search-results">
         <p>Need something done? Use the power of community to find a trusted freelancer who can do it!</p>
-        <p>Want to offer your services?</p>
+        <p>Want to offer your services? Join our cooperative!</p>
         <p>NOTE: this site is currently for DEMONSTRATION PURPOSES ONLY.</p>
     </div>
 </main>
