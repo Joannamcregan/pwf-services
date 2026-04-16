@@ -8,9 +8,26 @@ class Search{
         this.servicesResultsSection = $('#pwf-services-search-results');
         this.servicesSearchTermError = $('#pwf-search-term-error');
         this.events();
+        this.resultsArr;
+        this.alreadyAdded = [];
     }
     events(){
         this.servicesSearchSubmitPreview.on('click', this.searchServicePreviews.bind(this));
+    }
+    addResult(i){
+        let resultDiv = $('<div />').addClass('pwf-service-search-result');
+        let resultTitle = $('<h2 />').html(this.resultsArr[i]['servicename']);
+        resultDiv.append(resultTitle);
+        let rawDescription = this.resultsArr[i]['servicedescription'];
+        let trimmedDescription = rawDescription.substr(0, 500);
+        trimmedDescription = trimmedDescription.length < rawDescription.length ? trimmedDescription.substr(0, Math.min(trimmedDescription.length, trimmedDescription.lastIndexOf(" "))) : trimmedDescription;
+        trimmedDescription += trimmedDescription.length < rawDescription.length ? '...' : '';
+        let resultDescription = $('<p />').html(trimmedDescription);
+        resultDiv.append(resultDescription);
+        let loginP = $('<p />').addClass('search-results-login').html('login for full details');
+        resultDiv.append(loginP);
+        this.servicesResultsSection.append(resultDiv);
+        this.alreadyAdded.push(this.resultsArr[i]['id']);
     }
     searchServicePreviews(){
         console.log('called');
@@ -30,41 +47,16 @@ class Search{
                     'searchTerm' : searchTerm
                 },
                 success: (response) => {
-                    console.log(response)
-                    let alreadyAdded = [];
-                    if(response.length < 1){
+                    this.resultsArr = response;
+                    if(this.resultsArr.length < 1){
                         this.servicesResultsSection.html("<p class='centered-text'>Sorry! We couldn't find any matching results.</p>");
                     } else {
-                        for(let i = 0; i < response.length; i++){
-                            if (response[i]['found_in'] == 'title'){
-                                let resultDiv = $('<div />').addClass('pwf-service-search-result');
-                                let resultTitle = $('<h2 />').html(response[i]['servicename']);
-                                resultDiv.append(resultTitle);
-                                let rawDescription = response[i]['servicedescription'];
-                                let trimmedDescription = rawDescription.substr(0, 500);
-                                trimmedDescription = trimmedDescription.length < rawDescription.length ? trimmedDescription.substr(0, Math.min(trimmedDescription.length, trimmedDescription.lastIndexOf(" "))) : trimmedDescription;
-                                trimmedDescription += trimmedDescription.length < rawDescription.length ? '...' : '';
-                                let resultDescription = $('<p />').html(trimmedDescription);
-                                resultDiv.append(resultDescription);
-                                let loginP = $('<p />').addClass('search-results-login').html('login for full details');
-                                resultDiv.append(loginP);
-                                this.servicesResultsSection.append(resultDiv);
-                                alreadyAdded.push(response[i]['id']);
+                        for(let i = 0; i < this.resultsArr.length; i++){
+                            if (this.resultsArr[i]['found_in'] == 'title'){
+                                this.addResult(i);
                             } else {
-                                if ($.inArray(response[i]['id'], alreadyAdded) == -1){
-                                    let resultDiv = $('<div />').addClass('pwf-service-search-result');
-                                    let resultTitle = $('<h2 />').html(response[i]['servicename']);
-                                    resultDiv.append(resultTitle);
-                                    let rawDescription = response[i]['servicedescription'];
-                                    let trimmedDescription = rawDescription.substr(0, 500);
-                                    trimmedDescription = trimmedDescription.length < rawDescription.length ? trimmedDescription.substr(0, Math.min(trimmedDescription.length, trimmedDescription.lastIndexOf(" "))) : trimmedDescription;
-                                    trimmedDescription += trimmedDescription.length < rawDescription.length ? '...' : '';
-                                    let resultDescription = $('<p />').html(trimmedDescription);
-                                    resultDiv.append(resultDescription);
-                                    let loginP = $('<p />').addClass('search-results-login').html('login for full details');
-                                    resultDiv.append(loginP);
-                                    this.servicesResultsSection.append(resultDiv);
-                                    alreadyAdded.push(response[i][id]);
+                                if ($.inArray(this.resultsArr[i]['id'], this.alreadyAdded) == -1){
+                                    this.addResult(i);
                                 }
                             }
                         }
