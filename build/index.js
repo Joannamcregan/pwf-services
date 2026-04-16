@@ -19,14 +19,16 @@ class Search {
   constructor() {
     this.servicesSearchField = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-services-search-field');
     this.servicesSearchSubmit = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-services-search-submit');
+    this.servicesSearchSubmitPreview = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-services-search-submit--preview');
     this.servicesResultsSection = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-services-search-results');
     this.servicesSearchTermError = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-search-term-error');
     this.events();
   }
   events() {
-    this.servicesSearchSubmit.on('click', this.searchServices.bind(this));
+    this.servicesSearchSubmitPreview.on('click', this.searchServicePreviews.bind(this));
   }
-  searchServices() {
+  searchServicePreviews() {
+    console.log('called');
     let searchTerm = this.servicesSearchField.val();
     this.servicesSearchTermError.addClass('hidden');
     if (searchTerm.length < 3) {
@@ -44,6 +46,44 @@ class Search {
         },
         success: response => {
           console.log(response);
+          let alreadyAdded = [];
+          if (response.length < 1) {
+            this.servicesResultsSection.html("<p class='centered-text'>Sorry! We couldn't find any matching results.</p>");
+          } else {
+            for (let i = 0; i < response.length; i++) {
+              if (response[i]['found_in'] == 'title') {
+                let resultDiv = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<div />').addClass('pwf-service-search-result');
+                let resultTitle = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<h2 />').html(response[i]['servicename']);
+                resultDiv.append(resultTitle);
+                let rawDescription = response[i]['servicedescription'];
+                let trimmedDescription = rawDescription.substr(0, 500);
+                trimmedDescription = trimmedDescription.length < rawDescription.length ? trimmedDescription.substr(0, Math.min(trimmedDescription.length, trimmedDescription.lastIndexOf(" "))) : trimmedDescription;
+                trimmedDescription += trimmedDescription.length < rawDescription.length ? '...' : '';
+                let resultDescription = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<p />').html(trimmedDescription);
+                resultDiv.append(resultDescription);
+                let loginP = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<p />').addClass('search-results-login').html('login for full details');
+                resultDiv.append(loginP);
+                this.servicesResultsSection.append(resultDiv);
+                alreadyAdded.push(response[i]['id']);
+              } else {
+                if (jquery__WEBPACK_IMPORTED_MODULE_0___default().inArray(response[i]['id'], alreadyAdded) == -1) {
+                  let resultDiv = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<div />').addClass('pwf-service-search-result');
+                  let resultTitle = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<h2 />').html(response[i]['servicename']);
+                  resultDiv.append(resultTitle);
+                  let rawDescription = response[i]['servicedescription'];
+                  let trimmedDescription = rawDescription.substr(0, 500);
+                  trimmedDescription = trimmedDescription.length < rawDescription.length ? trimmedDescription.substr(0, Math.min(trimmedDescription.length, trimmedDescription.lastIndexOf(" "))) : trimmedDescription;
+                  trimmedDescription += trimmedDescription.length < rawDescription.length ? '...' : '';
+                  let resultDescription = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<p />').html(trimmedDescription);
+                  resultDiv.append(resultDescription);
+                  let loginP = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<p />').addClass('search-results-login').html('login for full details');
+                  resultDiv.append(loginP);
+                  this.servicesResultsSection.append(resultDiv);
+                  alreadyAdded.push(response[i][id]);
+                }
+              }
+            }
+          }
         },
         error: response => {
           console.log(response);

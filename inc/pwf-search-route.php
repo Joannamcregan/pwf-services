@@ -16,10 +16,19 @@ function getServices($data){
     $serviceTypesTable = $wpdb->prefix . "pwf_service_types";
     $usersTable = $wpdb->prefix . "users";
     $resultsArr = [];
-    $query = 'SELECT services.*, users.display_name FROM %i services 
+    $query = 'SELECT services.id, services.servicename, services.servicedescription, services.priceballpark, services.timeframe, services.postedby, "title" as "found_in", users.display_name as "provider_name" FROM %i services 
     JOIN %i types ON services.TYPEID = types.ID
-    JOIN %i users ON users.id = services.PROVIDERID
-    WHERE services.SERVICENAME LIKE %s';
+    JOIN %i users ON users.id = services.postedby
+    WHERE services.SERVICENAME LIKE %s
+    AND isrequest = 0';
+    $results = $wpdb->get_results($wpdb->prepare($query, $servicesTable, $serviceTypesTable, $usersTable, '%' . $wpdb->esc_like($searchTerm) . '%'), ARRAY_A);
+    array_push($resultsArr, ...$results);
+
+    $query = 'SELECT services.id, services.servicename, services.servicedescription, services.priceballpark, services.timeframe, services.postedby, "description" as "found_in", users.display_name as "provider_name" FROM %i services 
+    JOIN %i types ON services.TYPEID = types.ID
+    JOIN %i users ON users.id = services.postedby
+    WHERE services.SERVICEDESCRIPTION LIKE %s
+    AND isrequest = 0';
     $results = $wpdb->get_results($wpdb->prepare($query, $servicesTable, $serviceTypesTable, $usersTable, '%' . $wpdb->esc_like($searchTerm) . '%'), ARRAY_A);
     array_push($resultsArr, ...$results);
     return $resultsArr;

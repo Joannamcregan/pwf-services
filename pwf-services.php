@@ -78,10 +78,10 @@ class PWFServicesPlugin {
             timeframe varchar(1000),
             isrequest bit NOT NULL default 0,
             typeid bigint(20) unsigned NOT NULL,
-            providerid bigint(20) unsigned NOT NULL,
+            postedby bigint(20) unsigned NOT NULL,
             createdate datetime NOT NULL,
             PRIMARY KEY  (id),
-            FOREIGN KEY  (providerid) REFERENCES $this->users_table(id),
+            FOREIGN KEY  (postedby) REFERENCES $this->users_table(id),
             FOREIGN KEY  (typeid) REFERENCES $this->service_types_table(id)
         ) $this->charset;");
         dbDelta("CREATE TABLE IF NOT EXISTS $this->categories_table (
