@@ -1,3 +1,6 @@
+main.pwf-services{
+    position: relative;
+}
 main.pwf-services h1{
     text-align: center;
 }
@@ -8,23 +11,31 @@ main.pwf-services input[type="text"]{
     display: block;
     margin: 5px auto;
 }
-p.pwf-services-search-boat{
+p.pwf-services-search-button{
     padding: 3px 7px 5px 7px;
     border-radius: 10px;
     border: solid black 2px;
     margin: 5px auto;
     width: fit-content;
-    background: rgba(239, 211, 211, 0.4);
+    background: rgba(240, 187, 198, 0.3);
 }
 div#pwf-services-search-results{
-    background: rgba(239, 211, 211, 0.15);
+    background: rgba(240, 187, 198, 0.15);
     border-radius: 20px;
-    width: 95%;
+    width: 90%;
     max-width: 800px;
-    padding: 20px;
     margin: 10px auto;
+    padding: 2px 0px;
+}
+div#pwf-services-search-results div.pwf-service-search-result, div#pwf-services-search-results p.initial-message{
+    margin: 20px;
 }
 #pwf-search-term-error{
     color: rgb(101, 1, 1);
     text-align: center;
+}
+div#load-more{
+    height: 50px;
+    width: 50px;
+    border: solid pink 2px;
 }

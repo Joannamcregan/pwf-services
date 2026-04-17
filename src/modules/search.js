@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import { load } from 'mime';
 
 class Search{
     constructor(){
@@ -7,13 +8,26 @@ class Search{
         this.servicesSearchSubmitPreview = $('#pwf-services-search-submit--preview');
         this.servicesResultsSection = $('#pwf-services-search-results');
         this.servicesSearchTermError = $('#pwf-search-term-error');
+        this.loadMoreDiv = $('#load-more');
         this.events();
         this.resultsArr;
         this.alreadyAdded = [];
+        this.batchInterval = 3;
+        this.batchCounter = 0;
+        this.moreResults = false;
+        window.onload = this.addBehavior();
     }
     events(){
         this.servicesSearchSubmitPreview.on('click', this.searchServicePreviews.bind(this));
     }
+    elementInView(el){
+        let windowHeight = window.innerHeight || document.documentElement.clientHeight;
+        let elementRect = el.get(0).getBoundingClientRect();
+        // console.log('elementRect is ' + elementRect.bottom);
+        // console.log('windowHeight is ' + windowHeight);
+        // console.log(elementRect.bottom >= windowHeight - 100);
+        return (elementRect.bottom <= windowHeight + 100);
+    };
     addResult(i){
         let resultDiv = $('<div />').addClass('pwf-service-search-result');
         let resultTitle = $('<h2 />').html(this.resultsArr[i]['servicename']);
@@ -29,8 +43,38 @@ class Search{
         this.servicesResultsSection.append(resultDiv);
         this.alreadyAdded.push(this.resultsArr[i]['id']);
     }
+    loadMoreResults = () => {
+        if (this.elementInView(this.loadMoreDiv) && this.moreResults == true) {
+            this.moreResults = false;
+            console.log('loading more results!');
+        }
+    }
+    addResultBatch(arr){
+        if (this.resultsArr.length <= parseInt(this.batchCounter, 10) + parseInt(this.batchInterval, 10)){
+            this.moreResults = false;
+            for(let i = 0; i < this.resultsArr.length; i++){
+                if (this.resultsArr[i]['found_in'] == 'title'){
+                    this.addResult(i);
+                } else {
+                    if ($.inArray(this.resultsArr[i]['id'], this.alreadyAdded) == -1){
+                        this.addResult(i);
+                    }
+                }
+            }
+        } else {
+            this.moreResults = true;
+            for(let i = 0; i < parseInt(this.batchCounter, 10) + parseInt(this.batchInterval, 10); i++){
+                if (this.resultsArr[i]['found_in'] == 'title'){
+                    this.addResult(i);
+                } else {
+                    if ($.inArray(this.resultsArr[i]['id'], this.alreadyAdded) == -1){
+                        this.addResult(i);
+                    }
+                }
+            }
+        }
+    }
     searchServicePreviews(){
-        console.log('called');
         let searchTerm = this.servicesSearchField.val();
         this.servicesSearchTermError.addClass('hidden');
         if (searchTerm.length < 3){
@@ -51,15 +95,7 @@ class Search{
                     if(this.resultsArr.length < 1){
                         this.servicesResultsSection.html("<p class='centered-text'>Sorry! We couldn't find any matching results.</p>");
                     } else {
-                        for(let i = 0; i < this.resultsArr.length; i++){
-                            if (this.resultsArr[i]['found_in'] == 'title'){
-                                this.addResult(i);
-                            } else {
-                                if ($.inArray(this.resultsArr[i]['id'], this.alreadyAdded) == -1){
-                                    this.addResult(i);
-                                }
-                            }
-                        }
+                        this.addResultBatch(this.resultsArr);
                     }
                 },
                 error: (response) => {
@@ -68,6 +104,16 @@ class Search{
             })
         }
     }
+
+    addBehavior() {
+        let searchFields = $('#pwf-services-search-field');
+        searchFields.each(() => {
+            window.addEventListener("scroll", () => {
+                this.loadMoreResults();
+            });
+        });
+    }
+
 }
 
 export default Search;
