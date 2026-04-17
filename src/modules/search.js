@@ -23,9 +23,6 @@ class Search{
     elementInView(el){
         let windowHeight = window.innerHeight || document.documentElement.clientHeight;
         let elementRect = el.get(0).getBoundingClientRect();
-        // console.log('elementRect is ' + elementRect.bottom);
-        // console.log('windowHeight is ' + windowHeight);
-        // console.log(elementRect.bottom >= windowHeight - 100);
         return (elementRect.bottom <= windowHeight + 100);
     };
     addResult(i){
@@ -43,16 +40,9 @@ class Search{
         this.servicesResultsSection.append(resultDiv);
         this.alreadyAdded.push(this.resultsArr[i]['id']);
     }
-    loadMoreResults = () => {
-        if (this.elementInView(this.loadMoreDiv) && this.moreResults == true) {
-            this.moreResults = false;
-            console.log('loading more results!');
-        }
-    }
-    addResultBatch(arr){
+    addResultBatch(){
         if (this.resultsArr.length <= parseInt(this.batchCounter, 10) + parseInt(this.batchInterval, 10)){
-            this.moreResults = false;
-            for(let i = 0; i < this.resultsArr.length; i++){
+            for(let i = this.batchCounter; i < this.resultsArr.length; i++){
                 if (this.resultsArr[i]['found_in'] == 'title'){
                     this.addResult(i);
                 } else {
@@ -62,8 +52,7 @@ class Search{
                 }
             }
         } else {
-            this.moreResults = true;
-            for(let i = 0; i < parseInt(this.batchCounter, 10) + parseInt(this.batchInterval, 10); i++){
+            for(let i = this.batchCounter; i < parseInt(this.batchCounter, 10) + parseInt(this.batchInterval, 10); i++){
                 if (this.resultsArr[i]['found_in'] == 'title'){
                     this.addResult(i);
                 } else {
@@ -72,6 +61,14 @@ class Search{
                     }
                 }
             }
+            this.moreResults = true;
+            this.batchCounter = this.batchCounter + this.batchInterval;
+        }
+    }
+    loadMoreResults = () => {
+        if (this.elementInView(this.loadMoreDiv) && this.moreResults == true) {
+            this.moreResults = false;
+            this.addResultBatch();
         }
     }
     searchServicePreviews(){
@@ -99,7 +96,7 @@ class Search{
                     }
                 },
                 error: (response) => {
-                    console.log(response);
+                    // console.log(response);
                 }
             })
         }
