@@ -82,8 +82,12 @@ class Search{
         }
     }
     searchServicePreviews(){
+        console.log(this.servicesSearchField.attr('placeholder'));
         let searchTerm = this.servicesSearchField.val();
         this.servicesSearchTermError.addClass('hidden');
+        if (searchTerm.length == 0){
+            searchTerm = this.servicesSearchField.attr('placeholder');
+        }
         if (searchTerm.length < 3){
             this.servicesSearchTermError.removeClass('hidden');
         } else {
@@ -101,7 +105,7 @@ class Search{
                     this.resultsArr = response;
                     this.isPreview = true;
                     if(this.resultsArr.length < 1){
-                        this.servicesResultsSection.html("<p class='centered-text'>Sorry! We couldn't find any matching results.</p>");
+                        this.servicesResultsSection.html("<p class='initial-message'>Sorry! We couldn't find any matching results.</p>");
                     } else {
                         this.addResultBatch();
                     }

@@ -27,15 +27,15 @@ class PWFServicesPlugin {
         add_filter('template_include', array($this, 'loadTemplate'), 99);
     }
 
-    function addServicesPage() {
-        $services_page = array(
-            'post_title' => 'Services',
+    function addPage($pageName){
+        $new_page = array(
+            'post_title' => $pageName,
             'post_content' => '',
             'post_status' => 'publish',
             'post_author' => 0,
             'post_type' => 'page'
         );
-        wp_insert_post($services_page);
+        wp_insert_post($new_page);
     }
 
     function registerScripts(){
@@ -53,6 +53,8 @@ class PWFServicesPlugin {
     function loadTemplate($template){
         if (is_page('Services')){
             return plugin_dir_path(__FILE__) . 'inc/template-services.php';
+        } else if (is_page('Requests')){
+            return plugin_dir_path(__FILE__) . 'inc/template-requests.php';
         } else {
             return $template;
         }
@@ -105,7 +107,11 @@ class PWFServicesPlugin {
         ) $this->charset;");
 
         if (post_exists('Services', '', '', 'page', 'publish') == 0){
-            $this->addServicesPage();
+            $this->addPage('Services');
+        }
+
+        if (post_exists('Requests', '', '', 'page', 'publish') == 0){
+            $this->addPage('Requests');
         }
     }
 }
