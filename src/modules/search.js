@@ -15,6 +15,7 @@ class Search{
         this.batchInterval = 3;
         this.batchCounter = 0;
         this.moreResults = false;
+        this.isPreview = false;
         window.onload = this.addBehavior();
     }
     events(){
@@ -35,8 +36,17 @@ class Search{
         trimmedDescription += trimmedDescription.length < rawDescription.length ? '...' : '';
         let resultDescription = $('<p />').html(trimmedDescription);
         resultDiv.append(resultDescription);
-        let loginP = $('<p />').addClass('search-results-login').html('login for full details');
-        resultDiv.append(loginP);
+        if (this.isPreview){
+            let loginP = $('<p />').addClass('search-results-login');
+            let siteRoot = window.location.origin;
+            let loginA = $('<a />').attr('href', siteRoot + '/wp-login.php').html('login for full details');
+            loginP.append(loginA);
+            resultDiv.append(loginP);
+        } else {
+            // append ballpark cost, time frame, and link to author page
+            let loginP = $('<p />').addClass('search-results-login').html('yay, you are logged in!');
+            resultDiv.append(loginP);
+        }
         this.servicesResultsSection.append(resultDiv);
         this.alreadyAdded.push(this.resultsArr[i]['id']);
     }
@@ -89,10 +99,11 @@ class Search{
                 },
                 success: (response) => {
                     this.resultsArr = response;
+                    this.isPreview = true;
                     if(this.resultsArr.length < 1){
                         this.servicesResultsSection.html("<p class='centered-text'>Sorry! We couldn't find any matching results.</p>");
                     } else {
-                        this.addResultBatch(this.resultsArr);
+                        this.addResultBatch();
                     }
                 },
                 error: (response) => {
