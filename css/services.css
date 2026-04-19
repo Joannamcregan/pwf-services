@@ -65,6 +65,7 @@ div.pwf-category-container{
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
+    justify-content: center;
 }
 span.pwf-category-span{
     margin: 5px;
