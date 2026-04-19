@@ -22,9 +22,6 @@ p.pwf-search-button{
 p.pwf-services-search-button{
     background: rgba(240, 187, 198, 0.3);
 }
-p.pwf-requests-search-button{
-    background: rgba(204, 187, 240, 0.3);
-}
 div.pwf-search-results{
     border-radius: 20px;
     width: 90%;
@@ -56,7 +53,25 @@ div.pwf-search-results p.initial-message{
     color: rgb(101, 1, 1);
     text-align: center;
 }
-div#load-more{
+div.pwf-load-more{
     height: 0px;
     visibility: hidden;
+}
+div.pwf-category-container{
+    width: 90%;
+    max-width: 700px;
+    margin: 30px auto 10px auto;
+    padding: 2px 0px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+span.pwf-category-span{
+    margin: 5px;
+    padding: 5px 10px;
+    border-radius: 10px;
+    border: solid rgba(204, 187, 240, 0.8) 2px;
+}
+span.pwf-category-span-selected{
+    background: rgba(204, 187, 240, 0.3);
 }

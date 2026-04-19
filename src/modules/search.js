@@ -5,28 +5,56 @@ class Search{
     constructor(){
         this.servicesSearchField = $('#pwf-services-search-field');
         this.servicesSearchSubmit = $('#pwf-services-search-submit');
-        this.servicesSearchSubmitPreview = $('#pwf-services-search-submit--preview');
         this.servicesResultsSection = $('#pwf-services-search-results');
         this.servicesSearchTermError = $('#pwf-search-term-error');
-        this.loadMoreDiv = $('#load-more');
+        this.loadMoreDiv = $('.pwf-load-more');
+        this.categorySpans = $('.pwf-category-span');
+        this.requestsResultsSection = $('#pwf-requests-search-results');
         this.events();
         this.resultsArr;
         this.alreadyAdded = [];
         this.batchInterval = 3;
         this.batchCounter = 0;
         this.moreResults = false;
-        this.isPreview = false;
+        this.isPreview = true;
         window.onload = this.addBehavior();
     }
     events(){
-        this.servicesSearchSubmitPreview.on('click', this.searchServicePreviews.bind(this));
+        this.servicesSearchSubmit.on('click', this.searchServices.bind(this));
+        this.categorySpans.on('click', this.browseRequests.bind(this));
+    }
+    browseRequests(e){
+        this.isPreview = ($(e.target).data('preview') > 0);
+        this.categorySpans.removeClass('pwf-category-span-selected');
+        $(e.target).addClass('pwf-category-span-selected');
+        $.ajax({
+            beforeSend: (xhr) => {
+                xhr.setRequestHeader('X-WP-Nonce', pwfData.nonce);
+            },
+            url: pwfData.root_url + '/wp-json/pwfSearch/v1/requestBrowse',
+            type: 'GET',
+            data: {
+                'categoryId' : $(e.target).data('id')
+            },
+            success: (response) => {
+                this.resultsArr = response;
+                if(this.resultsArr.length < 1){
+                    this.servicesResultsSection.html("<p class='initial-message'>Sorry! We couldn't find any matching results.</p>");
+                } else {
+                    this.addResultBatch(this.requestsResultsSection);
+                }
+            },
+            error: (response) => {
+                // console.log(response);
+            }
+        })
     }
     elementInView(el){
         let windowHeight = window.innerHeight || document.documentElement.clientHeight;
         let elementRect = el.get(0).getBoundingClientRect();
         return (elementRect.bottom <= windowHeight + 100);
     };
-    addResult(i){
+    addResult(i, resultsSection){
         let resultDiv = $('<div />').addClass('pwf-service-search-result');
         let resultTitle = $('<h2 />').html(this.resultsArr[i]['servicename']);
         resultDiv.append(resultTitle);
@@ -47,17 +75,17 @@ class Search{
             let loginP = $('<p />').addClass('search-results-login').html('yay, you are logged in!');
             resultDiv.append(loginP);
         }
-        this.servicesResultsSection.append(resultDiv);
+        resultsSection.append($(resultDiv));
         this.alreadyAdded.push(this.resultsArr[i]['id']);
     }
-    addResultBatch(){
+    addResultBatch(resultsSection){
         if (this.resultsArr.length <= parseInt(this.batchCounter, 10) + parseInt(this.batchInterval, 10)){
             for(let i = this.batchCounter; i < this.resultsArr.length; i++){
                 if (this.resultsArr[i]['found_in'] == 'title'){
-                    this.addResult(i);
+                    this.addResult(i, resultsSection);
                 } else {
                     if ($.inArray(this.resultsArr[i]['id'], this.alreadyAdded) == -1){
-                        this.addResult(i);
+                        this.addResult(i, resultsSection);
                     }
                 }
             }
@@ -78,11 +106,11 @@ class Search{
     loadMoreResults = () => {
         if (this.elementInView(this.loadMoreDiv) && this.moreResults == true) {
             this.moreResults = false;
-            this.addResultBatch();
+            this.addResultBatch(this.loadMoreDiv.closest('main').find('.pwf-search-results'));
         }
     }
-    searchServicePreviews(){
-        console.log(this.servicesSearchField.attr('placeholder'));
+    searchServices(){
+        this.isPreview = (this.servicesSearchSubmit.data('preview') > 0);
         let searchTerm = this.servicesSearchField.val();
         this.servicesSearchTermError.addClass('hidden');
         if (searchTerm.length == 0){
@@ -103,11 +131,10 @@ class Search{
                 },
                 success: (response) => {
                     this.resultsArr = response;
-                    this.isPreview = true;
                     if(this.resultsArr.length < 1){
                         this.servicesResultsSection.html("<p class='initial-message'>Sorry! We couldn't find any matching results.</p>");
                     } else {
-                        this.addResultBatch();
+                        this.addResultBatch(this.servicesResultsSection);
                     }
                 },
                 error: (response) => {

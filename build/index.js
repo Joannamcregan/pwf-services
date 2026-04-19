@@ -22,28 +22,56 @@ class Search {
   constructor() {
     this.servicesSearchField = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-services-search-field');
     this.servicesSearchSubmit = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-services-search-submit');
-    this.servicesSearchSubmitPreview = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-services-search-submit--preview');
     this.servicesResultsSection = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-services-search-results');
     this.servicesSearchTermError = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-search-term-error');
-    this.loadMoreDiv = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#load-more');
+    this.loadMoreDiv = jquery__WEBPACK_IMPORTED_MODULE_0___default()('.pwf-load-more');
+    this.categorySpans = jquery__WEBPACK_IMPORTED_MODULE_0___default()('.pwf-category-span');
+    this.requestsResultsSection = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-requests-search-results');
     this.events();
     this.resultsArr;
     this.alreadyAdded = [];
     this.batchInterval = 3;
     this.batchCounter = 0;
     this.moreResults = false;
-    this.isPreview = false;
+    this.isPreview = true;
     window.onload = this.addBehavior();
   }
   events() {
-    this.servicesSearchSubmitPreview.on('click', this.searchServicePreviews.bind(this));
+    this.servicesSearchSubmit.on('click', this.searchServices.bind(this));
+    this.categorySpans.on('click', this.browseRequests.bind(this));
+  }
+  browseRequests(e) {
+    this.isPreview = jquery__WEBPACK_IMPORTED_MODULE_0___default()(e.target).data('preview') > 0;
+    this.categorySpans.removeClass('pwf-category-span-selected');
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()(e.target).addClass('pwf-category-span-selected');
+    jquery__WEBPACK_IMPORTED_MODULE_0___default().ajax({
+      beforeSend: xhr => {
+        xhr.setRequestHeader('X-WP-Nonce', pwfData.nonce);
+      },
+      url: pwfData.root_url + '/wp-json/pwfSearch/v1/requestBrowse',
+      type: 'GET',
+      data: {
+        'categoryId': jquery__WEBPACK_IMPORTED_MODULE_0___default()(e.target).data('id')
+      },
+      success: response => {
+        this.resultsArr = response;
+        if (this.resultsArr.length < 1) {
+          this.servicesResultsSection.html("<p class='initial-message'>Sorry! We couldn't find any matching results.</p>");
+        } else {
+          this.addResultBatch(this.requestsResultsSection);
+        }
+      },
+      error: response => {
+        // console.log(response);
+      }
+    });
   }
   elementInView(el) {
     let windowHeight = window.innerHeight || document.documentElement.clientHeight;
     let elementRect = el.get(0).getBoundingClientRect();
     return elementRect.bottom <= windowHeight + 100;
   }
-  addResult(i) {
+  addResult(i, resultsSection) {
     let resultDiv = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<div />').addClass('pwf-service-search-result');
     let resultTitle = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<h2 />').html(this.resultsArr[i]['servicename']);
     resultDiv.append(resultTitle);
@@ -64,17 +92,17 @@ class Search {
       let loginP = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<p />').addClass('search-results-login').html('yay, you are logged in!');
       resultDiv.append(loginP);
     }
-    this.servicesResultsSection.append(resultDiv);
+    resultsSection.append(jquery__WEBPACK_IMPORTED_MODULE_0___default()(resultDiv));
     this.alreadyAdded.push(this.resultsArr[i]['id']);
   }
-  addResultBatch() {
+  addResultBatch(resultsSection) {
     if (this.resultsArr.length <= parseInt(this.batchCounter, 10) + parseInt(this.batchInterval, 10)) {
       for (let i = this.batchCounter; i < this.resultsArr.length; i++) {
         if (this.resultsArr[i]['found_in'] == 'title') {
-          this.addResult(i);
+          this.addResult(i, resultsSection);
         } else {
           if (jquery__WEBPACK_IMPORTED_MODULE_0___default().inArray(this.resultsArr[i]['id'], this.alreadyAdded) == -1) {
-            this.addResult(i);
+            this.addResult(i, resultsSection);
           }
         }
       }
@@ -95,11 +123,11 @@ class Search {
   loadMoreResults = () => {
     if (this.elementInView(this.loadMoreDiv) && this.moreResults == true) {
       this.moreResults = false;
-      this.addResultBatch();
+      this.addResultBatch(this.loadMoreDiv.closest('main').find('.pwf-search-results'));
     }
   };
-  searchServicePreviews() {
-    console.log(this.servicesSearchField.attr('placeholder'));
+  searchServices() {
+    this.isPreview = this.servicesSearchSubmit.data('preview') > 0;
     let searchTerm = this.servicesSearchField.val();
     this.servicesSearchTermError.addClass('hidden');
     if (searchTerm.length == 0) {
@@ -120,11 +148,10 @@ class Search {
         },
         success: response => {
           this.resultsArr = response;
-          this.isPreview = true;
           if (this.resultsArr.length < 1) {
             this.servicesResultsSection.html("<p class='initial-message'>Sorry! We couldn't find any matching results.</p>");
           } else {
-            this.addResultBatch();
+            this.addResultBatch(this.servicesResultsSection);
           }
         },
         error: response => {
