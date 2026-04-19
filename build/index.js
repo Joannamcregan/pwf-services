@@ -56,8 +56,9 @@ class Search {
       success: response => {
         this.resultsArr = response;
         if (this.resultsArr.length < 1) {
-          this.servicesResultsSection.html("<p class='initial-message'>Sorry! We couldn't find any matching results.</p>");
+          this.requestsResultsSection.html("<p class='initial-message'>Sorry! We couldn't find any matching results.</p>");
         } else {
+          this.requestsResultsSection.html('');
           this.addResultBatch(this.requestsResultsSection);
         }
       },
@@ -151,6 +152,7 @@ class Search {
           if (this.resultsArr.length < 1) {
             this.servicesResultsSection.html("<p class='initial-message'>Sorry! We couldn't find any matching results.</p>");
           } else {
+            this.servicesResultsSection.html('');
             this.addResultBatch(this.servicesResultsSection);
           }
         },
