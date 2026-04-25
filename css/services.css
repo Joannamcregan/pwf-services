@@ -11,10 +11,11 @@ main.pwf-services input[type="text"]{
     display: block;
     margin: 5px auto;
 }
-p.pwf-search-button{
-    padding: 3px 7px 5px 7px;
+.pwf-search-button{
+    padding: 7px 15px;
     border-radius: 10px;
     border: solid black 2px;
+    display: block;
     margin: 5px auto;
     width: fit-content;
     background: rgba(240, 187, 198, 0.3);
@@ -36,7 +37,7 @@ div#pwf-requests-search-results{
     background: rgba(204, 187, 240, 0.15);
 }
 div.pwf-search-results div.pwf-service-search-result{
-    border-bottom: solid rgba(240, 187, 198, 0.5) 2px;
+    border-bottom: solid rgba(204, 187, 240, 0.5) 2px;
     margin: 20px;
     padding: 10px 0px 30px 0px;
 }

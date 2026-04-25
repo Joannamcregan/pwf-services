@@ -25,8 +25,15 @@ class Search{
     }
     browseRequests(e){
         this.isPreview = ($(e.target).data('preview') > 0);
+        this.alreadyAdded = [];
+        this.batchCounter = 0;
+        this.moreResults = false;
         this.categorySpans.removeClass('pwf-category-span-selected');
+        this.categorySpans.each(function(){
+            $(this).attr('aria-label', $(this).text() + ' is not selected');
+        })
         $(e.target).addClass('pwf-category-span-selected');
+        $(e.target).attr('aria-label', $(e.target).text() + ' is selected');
         $.ajax({
             beforeSend: (xhr) => {
                 xhr.setRequestHeader('X-WP-Nonce', pwfData.nonce);
@@ -56,7 +63,7 @@ class Search{
         return (elementRect.bottom <= windowHeight + 100);
     };
     addResult(i, resultsSection){
-        let resultDiv = $('<div />').addClass('pwf-service-search-result');
+        let resultDiv = $('<div />').addClass('pwf-service-search-result').attr('tabindex', 0);
         let resultTitle = $('<h2 />').html(this.resultsArr[i]['servicename']);
         resultDiv.append(resultTitle);
         let rawDescription = this.resultsArr[i]['servicedescription'];
@@ -68,7 +75,7 @@ class Search{
         if (this.isPreview){
             let loginP = $('<p />').addClass('search-results-login');
             let siteRoot = window.location.origin;
-            let loginA = $('<a />').attr('href', siteRoot + '/wp-login.php').html('login for full details');
+            let loginA = $('<a />').attr('href', siteRoot + '/login').html('login for full details');
             loginP.append(loginA);
             resultDiv.append(loginP);
         } else {
@@ -76,7 +83,7 @@ class Search{
             let loginP = $('<p />').addClass('search-results-login').html('yay, you are logged in!');
             resultDiv.append(loginP);
         }
-        resultsSection.append($(resultDiv));
+        resultsSection.append(resultDiv);
         this.alreadyAdded.push(this.resultsArr[i]['id']);
     }
     addResultBatch(resultsSection){
@@ -93,10 +100,10 @@ class Search{
         } else {
             for(let i = this.batchCounter; i < parseInt(this.batchCounter, 10) + parseInt(this.batchInterval, 10); i++){
                 if (this.resultsArr[i]['found_in'] == 'title'){
-                    this.addResult(i);
+                    this.addResult(i, resultsSection);
                 } else {
                     if ($.inArray(this.resultsArr[i]['id'], this.alreadyAdded) == -1){
-                        this.addResult(i);
+                        this.addResult(i, resultsSection);
                     }
                 }
             }
@@ -112,6 +119,9 @@ class Search{
     }
     searchServices(){
         this.isPreview = (this.servicesSearchSubmit.data('preview') > 0);
+        this.alreadyAdded = [];
+        this.batchCounter = 0;
+        this.moreResults = false;
         let searchTerm = this.servicesSearchField.val();
         this.servicesSearchTermError.addClass('hidden');
         if (searchTerm.length == 0){

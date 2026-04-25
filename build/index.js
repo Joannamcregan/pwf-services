@@ -42,8 +42,15 @@ class Search {
   }
   browseRequests(e) {
     this.isPreview = jquery__WEBPACK_IMPORTED_MODULE_0___default()(e.target).data('preview') > 0;
+    this.alreadyAdded = [];
+    this.batchCounter = 0;
+    this.moreResults = false;
     this.categorySpans.removeClass('pwf-category-span-selected');
+    this.categorySpans.each(function () {
+      jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).attr('aria-label', jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).text() + ' is not selected');
+    });
     jquery__WEBPACK_IMPORTED_MODULE_0___default()(e.target).addClass('pwf-category-span-selected');
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()(e.target).attr('aria-label', jquery__WEBPACK_IMPORTED_MODULE_0___default()(e.target).text() + ' is selected');
     jquery__WEBPACK_IMPORTED_MODULE_0___default().ajax({
       beforeSend: xhr => {
         xhr.setRequestHeader('X-WP-Nonce', pwfData.nonce);
@@ -73,7 +80,7 @@ class Search {
     return elementRect.bottom <= windowHeight + 100;
   }
   addResult(i, resultsSection) {
-    let resultDiv = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<div />').addClass('pwf-service-search-result');
+    let resultDiv = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<div />').addClass('pwf-service-search-result').attr('tabindex', 0);
     let resultTitle = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<h2 />').html(this.resultsArr[i]['servicename']);
     resultDiv.append(resultTitle);
     let rawDescription = this.resultsArr[i]['servicedescription'];
@@ -85,7 +92,7 @@ class Search {
     if (this.isPreview) {
       let loginP = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<p />').addClass('search-results-login');
       let siteRoot = window.location.origin;
-      let loginA = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<a />').attr('href', siteRoot + '/wp-login.php').html('login for full details');
+      let loginA = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<a />').attr('href', siteRoot + '/login').html('login for full details');
       loginP.append(loginA);
       resultDiv.append(loginP);
     } else {
@@ -93,7 +100,7 @@ class Search {
       let loginP = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<p />').addClass('search-results-login').html('yay, you are logged in!');
       resultDiv.append(loginP);
     }
-    resultsSection.append(jquery__WEBPACK_IMPORTED_MODULE_0___default()(resultDiv));
+    resultsSection.append(resultDiv);
     this.alreadyAdded.push(this.resultsArr[i]['id']);
   }
   addResultBatch(resultsSection) {
@@ -110,10 +117,10 @@ class Search {
     } else {
       for (let i = this.batchCounter; i < parseInt(this.batchCounter, 10) + parseInt(this.batchInterval, 10); i++) {
         if (this.resultsArr[i]['found_in'] == 'title') {
-          this.addResult(i);
+          this.addResult(i, resultsSection);
         } else {
           if (jquery__WEBPACK_IMPORTED_MODULE_0___default().inArray(this.resultsArr[i]['id'], this.alreadyAdded) == -1) {
-            this.addResult(i);
+            this.addResult(i, resultsSection);
           }
         }
       }
@@ -129,6 +136,9 @@ class Search {
   };
   searchServices() {
     this.isPreview = this.servicesSearchSubmit.data('preview') > 0;
+    this.alreadyAdded = [];
+    this.batchCounter = 0;
+    this.moreResults = false;
     let searchTerm = this.servicesSearchField.val();
     this.servicesSearchTermError.addClass('hidden');
     if (searchTerm.length == 0) {

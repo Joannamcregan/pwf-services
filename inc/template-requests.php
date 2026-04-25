@@ -10,7 +10,7 @@ $results = $wpdb->get_results($wpdb->prepare($query, $categoriesTable), ARRAY_A)
     <?php if (count($results) > 0){
         ?><div class="pwf-category-container">
         <?php for ($i = 0; $i < count($results); $i++){
-            ?><span class="pwf-category-span" data-id="<?php echo $results[$i]['id']; ?>" data-preview="<?php echo $preview; ?>"><?php echo $results[$i]['category_name']; ?></span>
+            ?><span class="pwf-category-span" data-id="<?php echo $results[$i]['id']; ?>" data-preview="<?php echo $preview; ?>" aria-label="<?php echo $results[$i]['category_name'] . ' is not selected'; ?>"><?php echo $results[$i]['category_name']; ?></span>
         <?php }
         }
         ?></div>
