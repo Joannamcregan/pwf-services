@@ -22,6 +22,11 @@ class Search{
     events(){
         this.servicesSearchSubmit.on('click', this.searchServices.bind(this));
         this.categorySpans.on('click', this.browseRequests.bind(this));
+        this.categorySpans.on('keypress', (e)=>{
+            if (e.key === 'Enter'){
+                this.browseRequests(e);
+            } 
+        })
     }
     browseRequests(e){
         this.isPreview = ($(e.target).data('preview') > 0);
