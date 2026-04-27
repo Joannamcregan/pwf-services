@@ -1,3 +1,6 @@
+:root {
+  --dark-red: rgb(101, 1, 1);
+}
 main.pwf-services{
     position: relative;
 }
@@ -51,7 +54,7 @@ div.pwf-search-results p.initial-message{
     margin: 20px;
 }
 #pwf-search-term-error{
-    color: rgb(101, 1, 1);
+    color: var(--dark-red);
     text-align: center;
 }
 div.pwf-load-more{
@@ -108,4 +111,8 @@ div.pwf-services-form button{
     padding: 7px 15px;
     display: block;
     margin: 20px auto 40px auto;
+}
+p.pwf-new-service-error{
+    color: var(--dark-red);
+    text-align: center;
 }

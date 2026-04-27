@@ -207,6 +207,12 @@ __webpack_require__.r(__webpack_exports__);
 class Submission {
   constructor() {
     this.servicesSubmissionButton = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-new-service-submit');
+    this.serviceNameInput = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-new-service-name');
+    this.serviceDescriptionInput = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-new-service-description');
+    this.servicePriceInput = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-new-service-price');
+    this.serviceTimeframeInput = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-new-service-timeframe');
+    this.serviceTypeInput = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-new-service-type');
+    this.serviceProviderInput = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-new-service-provider');
     this.events();
   }
   events() {
