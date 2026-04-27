@@ -190,6 +190,36 @@ class Search {
 
 /***/ },
 
+/***/ "./src/modules/submission.js"
+/*!***********************************!*\
+  !*** ./src/modules/submission.js ***!
+  \***********************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "jquery");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+
+class Submission {
+  constructor() {
+    this.servicesSubmissionButton = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-new-service-submit');
+    this.events();
+  }
+  events() {
+    this.servicesSubmissionButton.on('click', this.submit.bind(this, 'services'));
+  }
+  submit(path) {
+    console.log(path);
+  }
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Submission);
+
+/***/ },
+
 /***/ "./node_modules/mime/Mime.js"
 /*!***********************************!*\
   !*** ./node_modules/mime/Mime.js ***!
@@ -427,8 +457,11 @@ var __webpack_exports__ = {};
   \**********************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_search__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/search */ "./src/modules/search.js");
+/* harmony import */ var _modules_submission__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/submission */ "./src/modules/submission.js");
+
 
 const search = new _modules_search__WEBPACK_IMPORTED_MODULE_0__["default"]();
+const submission = new _modules_submission__WEBPACK_IMPORTED_MODULE_1__["default"]();
 })();
 
 /******/ })()

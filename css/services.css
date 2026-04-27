@@ -100,3 +100,12 @@ div.pwf-services-form textarea{
     border-radius: 2px;
     margin: 5px auto 30px auto;
 }
+div.pwf-services-form select{
+    width: fit-content;
+    padding: 5px;
+}
+div.pwf-services-form button{
+    padding: 7px 15px;
+    display: block;
+    margin: 20px auto 40px auto;
+}
