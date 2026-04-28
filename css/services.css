@@ -102,6 +102,7 @@ div.pwf-services-form textarea{
     border-style: solid;
     border-radius: 2px;
     margin: 5px auto 30px auto;
+    padding: 10px;
 }
 div.pwf-services-form select{
     width: fit-content;

@@ -8,6 +8,7 @@
 if( ! defined('ABSPATH') ) exit;
 
 require_once plugin_dir_path(__FILE__) . 'inc/pwf-search-route.php';
+require_once plugin_dir_path(__FILE__) . 'inc/pwf-submit-route.php';
 
 class PWFServicesPlugin {
     function __construct() {

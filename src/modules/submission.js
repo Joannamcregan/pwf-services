@@ -30,6 +30,27 @@ class Submission{
             this.noServiceDescriptionError.addClass('hidden');
             this.noServicePriceError.addClass('hidden');
             this.noServiceTimeframeError.addClass('hidden');
+            $.ajax({
+            beforeSend: (xhr) => {
+                xhr.setRequestHeader('X-WP-Nonce', pwfData.nonce);
+            },
+            url: pwfData.root_url + '/wp-json/pwfSubmit/v1/addService',
+            type: 'POST',
+            data: {
+                'serviceName' : serviceName,
+                'serviceDescription' : serviceDescription,
+                'servicePrice' : servicePrice,
+                'serviceTimeframe' : serviceTimeframe,
+                'serviceType' : serviceType,
+                'provider' : provider
+            },
+            success: (response) => {
+                console.log(response);
+            },
+            error: (response) => {
+                console.log(response);
+            }
+        })
         } else {
             if (serviceName == ''){
                 this.noServiceNameError.removeClass('hidden');
