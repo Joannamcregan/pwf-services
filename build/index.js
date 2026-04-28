@@ -213,13 +213,49 @@ class Submission {
     this.serviceTimeframeInput = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-new-service-timeframe');
     this.serviceTypeInput = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-new-service-type');
     this.serviceProviderInput = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-new-service-provider');
+    this.noServiceNameError = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-new-service-error--name');
+    this.noServiceDescriptionError = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-new-service-error--description');
+    this.noServicePriceError = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-new-service-error--price');
+    this.noServiceTimeframeError = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-new-service-error--timeframe');
     this.events();
   }
   events() {
     this.servicesSubmissionButton.on('click', this.submit.bind(this, 'services'));
   }
   submit(path) {
-    console.log(path);
+    let serviceName = this.serviceNameInput.val();
+    let serviceDescription = this.serviceDescriptionInput.val();
+    let servicePrice = this.servicePriceInput.val();
+    let serviceTimeframe = this.serviceTimeframeInput.val();
+    let serviceType = this.serviceTypeInput.find(":selected").data('id');
+    let provider = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-new-service-provider').find(":selected").data('id');
+    if (serviceName != '' && serviceDescription != '' && servicePrice != '' && serviceTimeframe != '') {
+      this.noServiceNameError.addClass('hidden');
+      this.noServiceDescriptionError.addClass('hidden');
+      this.noServicePriceError.addClass('hidden');
+      this.noServiceTimeframeError.addClass('hidden');
+    } else {
+      if (serviceName == '') {
+        this.noServiceNameError.removeClass('hidden');
+      } else {
+        this.noServiceNameError.addClass('hidden');
+      }
+      if (serviceDescription == '') {
+        this.noServiceDescriptionError.removeClass('hidden');
+      } else {
+        this.noServiceDescriptionError.addClass('hidden');
+      }
+      if (servicePrice == '') {
+        this.noServicePriceError.removeClass('hidden');
+      } else {
+        this.noServicePriceError.addClass('hidden');
+      }
+      if (serviceTimeframe == '') {
+        this.noServiceTimeframeError.removeClass('hidden');
+      } else {
+        this.noServiceTimeframeError.addClass('hidden');
+      }
+    }
   }
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Submission);

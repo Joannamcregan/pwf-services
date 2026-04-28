@@ -25,7 +25,7 @@ $user = wp_get_current_user();
                 if ($results){
                     ?><select id="pwf-new-service-type">
                     <?php for ($i = 0; $i < count($results); $i++){
-                        ?><option data-typeid="<?php echo $results[$i]['id'] ?>"><?php echo $results[$i]['typename'] ?></option>
+                        ?><option data-id="<?php echo $results[$i]['id'] ?>"><?php echo $results[$i]['typename'] ?></option>
                     <?php }
                     ?></select>
                 <?php }
@@ -35,7 +35,7 @@ $user = wp_get_current_user();
                 if ($results){
                     ?><select id="pwf-new-service-provider">
                     <?php for ($i = 0; $i < count($results); $i++){
-                        ?><option data-userid="<?php echo $results[$i]['id'] ?>"><?php echo $results[$i]['display_name'] ?></option>
+                        ?><option data-id="<?php echo $results[$i]['id'] ?>"><?php echo $results[$i]['display_name'] ?></option>
                     <?php }
                     ?></select>
                 <?php }
