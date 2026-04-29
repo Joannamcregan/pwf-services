@@ -19,11 +19,11 @@ $user = wp_get_current_user();
                 <input type="text" id="pwf-new-service-price"></input>
                 <label for="pwf-new-service-timeframe">Estimated time to complete:</label>
                 <input type="text" id="pwf-new-service-timeframe"></input>
-                <label for="pwf-new-service-type">Service type:</label>
                 <?php $query = 'SELECT id, typename FROM %i';
                 $results = $wpdb->get_results($wpdb->prepare($query, $serviceTypesTable), ARRAY_A);
                 if ($results){
-                    ?><select id="pwf-new-service-type">
+                    ?><label for="pwf-new-service-type">Service type:</label>
+                    <select id="pwf-new-service-type">
                     <?php for ($i = 0; $i < count($results); $i++){
                         ?><option data-id="<?php echo $results[$i]['id'] ?>"><?php echo $results[$i]['typename'] ?></option>
                     <?php }
@@ -38,6 +38,17 @@ $user = wp_get_current_user();
                         ?><option data-id="<?php echo $results[$i]['id'] ?>"><?php echo $results[$i]['display_name'] ?></option>
                     <?php }
                     ?></select>
+                <?php }
+                $query = 'SELECT * FROM %i';
+                $results = $wpdb->get_results($wpdb->prepare($query, $categoriesTable), ARRAY_A);
+                if ($results){
+                    ?><p class="pwf-service-categories-label">Service categories</p>
+                    <div class="pwf-category-container">
+                        <?php for ($i = 0; $i < count($results); $i++){
+                            ?><span class="pwf-category-span" data-id="<?php echo $results[$i]['id']; ?>" data-preview="<?php echo $preview; ?>" aria-label="<?php echo $results[$i]['category_name'] . ' is not selected'; ?>" tabindex="0"><?php echo $results[$i]['category_name']; ?></span>
+                        <?php }
+                    ?></div>
+                    <p class="pwf-new-service-error hidden" id="pwf-new-service-error--categories">No more than three categories can be selected.</p>
                 <?php }
                 ?><p class="pwf-new-service-error hidden" id="pwf-new-service-error--name">Service name cannot be blank.</p>
                 <p class="pwf-new-service-error hidden" id="pwf-new-service-error--description">Service description cannot be blank.</p>

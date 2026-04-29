@@ -111,9 +111,14 @@ div.pwf-services-form select{
 div.pwf-services-form button{
     padding: 7px 15px;
     display: block;
-    margin: 20px auto 40px auto;
+    margin: 40px auto 40px auto;
 }
 p.pwf-new-service-error{
     color: var(--dark-red);
     text-align: center;
+}
+p.pwf-service-categories-label{
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: -10px;
 }

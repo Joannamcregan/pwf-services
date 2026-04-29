@@ -249,7 +249,10 @@ class Submission {
           'provider': provider
         },
         success: response => {
-          console.log(response);
+          this.serviceNameInput.val('');
+          this.serviceDescriptionInput.val('');
+          this.servicePriceInput.val('');
+          this.serviceTimeframeInput.val('');
         },
         error: response => {
           console.log(response);
