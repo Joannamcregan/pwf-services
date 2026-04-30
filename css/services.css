@@ -71,7 +71,7 @@ div.pwf-category-container{
     flex-direction: row;
     justify-content: center;
 }
-span.pwf-category-span{
+span.pwf-category-span, span.pwf-new-service-category-span{
     margin: 5px;
     padding: 5px 10px;
     border-radius: 10px;

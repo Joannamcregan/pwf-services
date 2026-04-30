@@ -39,13 +39,13 @@ $user = wp_get_current_user();
                     <?php }
                     ?></select>
                 <?php }
-                $query = 'SELECT * FROM %i';
+                $query = 'SELECT id, category_name FROM %i order by category_name';
                 $results = $wpdb->get_results($wpdb->prepare($query, $categoriesTable), ARRAY_A);
                 if ($results){
                     ?><p class="pwf-service-categories-label">Service categories</p>
                     <div class="pwf-category-container">
                         <?php for ($i = 0; $i < count($results); $i++){
-                            ?><span class="pwf-category-span" data-id="<?php echo $results[$i]['id']; ?>" data-preview="<?php echo $preview; ?>" aria-label="<?php echo $results[$i]['category_name'] . ' is not selected'; ?>" tabindex="0"><?php echo $results[$i]['category_name']; ?></span>
+                            ?><span class="pwf-new-service-category-span" data-id="<?php echo $results[$i]['id']; ?>" data-preview="<?php echo $preview; ?>" aria-label="<?php echo $results[$i]['category_name'] . ' is not selected'; ?>" tabindex="0"><?php echo $results[$i]['category_name']; ?></span>
                         <?php }
                     ?></div>
                     <p class="pwf-new-service-error hidden" id="pwf-new-service-error--categories">No more than three categories can be selected.</p>

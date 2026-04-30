@@ -96,6 +96,9 @@ class PWFServicesPlugin {
             category_description varchar(500),
             createdate datetime NOT NULL,
             createdby bigint(20) unsigned NOT NULL,
+            issuggestion bit NOT NULL default 0,
+            approveddate datetime,
+            approvedby bigint(20) unsigned,
             PRIMARY KEY  (id),
             FOREIGN KEY  (createdby) REFERENCES $this->users_table(id)
         ) $this->charset;");

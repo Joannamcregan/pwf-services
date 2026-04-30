@@ -217,10 +217,28 @@ class Submission {
     this.noServiceDescriptionError = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-new-service-error--description');
     this.noServicePriceError = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-new-service-error--price');
     this.noServiceTimeframeError = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-new-service-error--timeframe');
+    this.categoriesError = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-new-service-error--categories');
+    this.categoryButtons = jquery__WEBPACK_IMPORTED_MODULE_0___default()('.pwf-new-service-category-span');
     this.events();
   }
   events() {
     this.servicesSubmissionButton.on('click', this.submit.bind(this, 'services'));
+    this.categoryButtons.on('click', this.toggleCategories.bind(this));
+  }
+  toggleCategories(e) {
+    if (jquery__WEBPACK_IMPORTED_MODULE_0___default()(e.target).hasClass('pwf-category-span-selected')) {
+      jquery__WEBPACK_IMPORTED_MODULE_0___default()(e.target).removeClass('pwf-category-span-selected');
+      jquery__WEBPACK_IMPORTED_MODULE_0___default()(e.target).attr('aria-label', jquery__WEBPACK_IMPORTED_MODULE_0___default()(e.target).text() + ' is not selected');
+      this.categoriesError.addClass('hidden');
+    } else {
+      if (jquery__WEBPACK_IMPORTED_MODULE_0___default()('.pwf-category-span-selected').length < 3) {
+        jquery__WEBPACK_IMPORTED_MODULE_0___default()(e.target).addClass('pwf-category-span-selected');
+        jquery__WEBPACK_IMPORTED_MODULE_0___default()(e.target).attr('aria-label', jquery__WEBPACK_IMPORTED_MODULE_0___default()(e.target).text() + ' is selected');
+        this.categoriesError.addClass('hidden');
+      } else {
+        this.categoriesError.removeClass('hidden');
+      }
+    }
   }
   submit(path) {
     let serviceName = this.serviceNameInput.val();

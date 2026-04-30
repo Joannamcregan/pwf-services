@@ -13,11 +13,29 @@ class Submission{
         this.noServiceDescriptionError = $('#pwf-new-service-error--description');
         this.noServicePriceError = $('#pwf-new-service-error--price');
         this.noServiceTimeframeError = $('#pwf-new-service-error--timeframe');
+        this.categoriesError = $('#pwf-new-service-error--categories');
+        this.categoryButtons = $('.pwf-new-service-category-span');
         this.events();
     }
     events(){
         this.servicesSubmissionButton.on('click', this.submit.bind(this, 'services'));
+        this.categoryButtons.on('click', this.toggleCategories.bind(this));
     }    
+    toggleCategories(e){
+        if ($(e.target).hasClass('pwf-category-span-selected')){
+            $(e.target).removeClass('pwf-category-span-selected');
+            $(e.target).attr('aria-label', $(e.target).text() + ' is not selected');
+            this.categoriesError.addClass('hidden');
+        } else {
+            if ($('.pwf-category-span-selected').length < 3){
+                $(e.target).addClass('pwf-category-span-selected');
+                $(e.target).attr('aria-label', $(e.target).text() + ' is selected');
+                this.categoriesError.addClass('hidden');
+            } else {
+                this.categoriesError.removeClass('hidden');
+            }
+        }
+    }
     submit(path){
         let serviceName = this.serviceNameInput.val();
         let serviceDescription = this.serviceDescriptionInput.val();
@@ -30,6 +48,7 @@ class Submission{
             this.noServiceDescriptionError.addClass('hidden');
             this.noServicePriceError.addClass('hidden');
             this.noServiceTimeframeError.addClass('hidden');
+
             $.ajax({
             beforeSend: (xhr) => {
                 xhr.setRequestHeader('X-WP-Nonce', pwfData.nonce);
@@ -45,7 +64,10 @@ class Submission{
                 'provider' : provider
             },
             success: (response) => {
-                console.log(response);
+                this.serviceNameInput.val('');
+                this.serviceDescriptionInput.val('');
+                this.servicePriceInput.val('');
+                this.serviceTimeframeInput.val('');
             },
             error: (response) => {
                 console.log(response);
