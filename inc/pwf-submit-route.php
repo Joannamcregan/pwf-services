@@ -20,7 +20,9 @@ function addService($data) {
     global $wpdb;
     $servicesTable = $wpdb->prefix . "pwf_services";
     $serviceTypesTable = $wpdb->prefix . "pwf_service_types";
+    $serviceCategoriesTable = $wpdb->prefix . "pwf_service_categories";
     if (is_user_logged_in() && (in_array( 'administrator', (array) $user->roles ) )){ //will change user roles
+        $now = date('Y-m-d H:i:s');
         $newService = [];
         $newService['servicename'] = $serviceName;
         $newService['servicedescription'] = $serviceDescription;
@@ -28,12 +30,27 @@ function addService($data) {
         $newService['timeframe'] = $serviceTimeframe;
         $newService['typeid'] = $serviceType;
         $newService['postedby'] = $provider;
-        $newService['createdate'] = date('Y-m-d H:i:s');
+        $newService['createdate'] = $now;
         $newService['isRequest'] = 0;
         $wpdb->insert($servicesTable, $newService);
         $newServiceId = $wpdb->insert_id;
-        return $newServiceId;
-        // return 'success';
+        if ($newServiceId > 0){
+            $categories = explode(',', trim(sanitize_text_field($data['categories']), '[]'));
+            if (count($categories) > 0){
+                $query = 'INSERT INTO %i (serviceid, categoryid, createdate) value';
+                foreach ($categories as $category){
+                    if (is_numeric($category)){
+                        $values = '(' . $newServiceId . ', ' . $category . ', "' . $now . '"), ';
+                        $query .= $values;
+                    }
+                }
+                $query = rtrim($query, ', ');
+                $wpdb->query($wpdb->prepare($query, $serviceCategoriesTable));
+            }
+            return 'success';
+        } else {
+            return 'fail';
+        }
     } else {
         wp_safe_redirect(site_url('/my-account'));
         return 'fail';

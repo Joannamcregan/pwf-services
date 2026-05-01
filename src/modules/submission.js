@@ -48,7 +48,10 @@ class Submission{
             this.noServiceDescriptionError.addClass('hidden');
             this.noServicePriceError.addClass('hidden');
             this.noServiceTimeframeError.addClass('hidden');
-
+            let selectedCategories = [];
+            $('.pwf-category-span-selected').each(function(){
+                selectedCategories.push($(this).data('id'));
+            })
             $.ajax({
             beforeSend: (xhr) => {
                 xhr.setRequestHeader('X-WP-Nonce', pwfData.nonce);
@@ -61,7 +64,8 @@ class Submission{
                 'servicePrice' : servicePrice,
                 'serviceTimeframe' : serviceTimeframe,
                 'serviceType' : serviceType,
-                'provider' : provider
+                'provider' : provider,
+                'categories' : JSON.stringify(selectedCategories)
             },
             success: (response) => {
                 this.serviceNameInput.val('');

@@ -252,6 +252,10 @@ class Submission {
       this.noServiceDescriptionError.addClass('hidden');
       this.noServicePriceError.addClass('hidden');
       this.noServiceTimeframeError.addClass('hidden');
+      let selectedCategories = [];
+      jquery__WEBPACK_IMPORTED_MODULE_0___default()('.pwf-category-span-selected').each(function () {
+        selectedCategories.push(jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data('id'));
+      });
       jquery__WEBPACK_IMPORTED_MODULE_0___default().ajax({
         beforeSend: xhr => {
           xhr.setRequestHeader('X-WP-Nonce', pwfData.nonce);
@@ -264,7 +268,8 @@ class Submission {
           'servicePrice': servicePrice,
           'serviceTimeframe': serviceTimeframe,
           'serviceType': serviceType,
-          'provider': provider
+          'provider': provider,
+          'categories': JSON.stringify(selectedCategories)
         },
         success: response => {
           this.serviceNameInput.val('');
