@@ -31,7 +31,7 @@ function addService($data) {
         $newService['typeid'] = $serviceType;
         $newService['postedby'] = $provider;
         $newService['createdate'] = $now;
-        $newService['isRequest'] = 0;
+        $newService['isRequest'] = false;
         $wpdb->insert($servicesTable, $newService);
         $newServiceId = $wpdb->insert_id;
         if ($newServiceId > 0){
