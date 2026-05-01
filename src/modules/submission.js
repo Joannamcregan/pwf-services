@@ -72,7 +72,9 @@ class Submission{
                 this.serviceDescriptionInput.val('');
                 this.servicePriceInput.val('');
                 this.serviceTimeframeInput.val('');
+                console.log('success');
                 this.categoryButtons.each(function(){
+                    console.log('each one');
                     $(this).removeClass('pwf-category-span-selected');
                 })
             },
