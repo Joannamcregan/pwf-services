@@ -15,6 +15,7 @@ function addService($data) {
     $servicePrice = sanitize_text_field($data['servicePrice']);
     $serviceTimeframe = sanitize_text_field($data['serviceTimeframe']);
     $serviceType = sanitize_text_field($data['serviceType']);
+    $isRequest = sanitize_text_field($data['isRequest']);
     $provider = sanitize_text_field($data['provider']); //will change to the id of the user making request once out of demo mode
     $user = wp_get_current_user();
     global $wpdb;
@@ -31,7 +32,7 @@ function addService($data) {
         $newService['typeid'] = $serviceType;
         $newService['postedby'] = $provider;
         $newService['createdate'] = $now;
-        $newService['isRequest'] = false;
+        $newService['isRequest'] = strtolower($isRequest) == 'true' ? true : false;
         $wpdb->insert($servicesTable, $newService);
         $newServiceId = $wpdb->insert_id;
         if ($newServiceId > 0){

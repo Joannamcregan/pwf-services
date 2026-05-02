@@ -207,6 +207,7 @@ __webpack_require__.r(__webpack_exports__);
 class Submission {
   constructor() {
     this.servicesSubmissionButton = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-new-service-submit');
+    this.requestsSubmissionButton = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-new-request-submit');
     this.serviceNameInput = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-new-service-name');
     this.serviceDescriptionInput = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-new-service-description');
     this.servicePriceInput = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-new-service-price');
@@ -222,7 +223,8 @@ class Submission {
     this.events();
   }
   events() {
-    this.servicesSubmissionButton.on('click', this.submit.bind(this, 'services'));
+    this.servicesSubmissionButton.on('click', this.submit.bind(this, 'false'));
+    this.requestsSubmissionButton.on('click', this.submit.bind(this, 'true'));
     this.categoryButtons.on('click', this.toggleCategories.bind(this));
   }
   toggleCategories(e) {
@@ -240,7 +242,7 @@ class Submission {
       }
     }
   }
-  submit(path) {
+  submit(isRequest) {
     let serviceName = this.serviceNameInput.val();
     let serviceDescription = this.serviceDescriptionInput.val();
     let servicePrice = this.servicePriceInput.val();
@@ -269,6 +271,7 @@ class Submission {
           'serviceTimeframe': serviceTimeframe,
           'serviceType': serviceType,
           'provider': provider,
+          'isRequest': isRequest,
           'categories': JSON.stringify(selectedCategories)
         },
         success: response => {
@@ -276,6 +279,9 @@ class Submission {
           this.serviceDescriptionInput.val('');
           this.servicePriceInput.val('');
           this.serviceTimeframeInput.val('');
+          this.categoryButtons.each(function () {
+            jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).removeClass('pwf-category-span-selected');
+          });
         },
         error: response => {
           console.log(response);
