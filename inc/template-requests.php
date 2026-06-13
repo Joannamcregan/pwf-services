@@ -16,8 +16,8 @@ $results = $wpdb->get_results($wpdb->prepare($query, $categoriesTable), ARRAY_A)
         ?></div>
     <p id="pwf-search-term-error" class="hidden">The search term cannot have less than 3 letters.</p>
     <div id="pwf-requests-search-results" class="pwf-search-results">
-        <p class="initial-message">Looking for work? Use the power of community to find trusted clients!</p>
-        <p class="initial-message">Want to post jobs? Join our cooperative!</p>
+        <p class="initial-message"><strong>Looking for work? Use the power of community to find trusted clients!</strong></p>
+        <p class="initial-message">Want to post jobs? <a href=""<?php echo esc_url(site_url('/join')) ?>">Join our cooperative!</a></p>
         <p  class="initial-message">NOTE: this site is currently for DEMONSTRATION PURPOSES ONLY.</p>
     </div>
     <div id="load-more"></div>

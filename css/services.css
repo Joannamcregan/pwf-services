@@ -22,6 +22,7 @@ main.pwf-services input[type="text"]{
     margin: 5px auto;
     width: fit-content;
     background: rgba(240, 187, 198, 0.3);
+    cursor: pointer;
 }
 p.pwf-services-search-button{
     background: rgba(240, 187, 198, 0.3);
@@ -76,6 +77,7 @@ span.pwf-category-span, span.pwf-new-service-category-span{
     padding: 5px 10px;
     border-radius: 10px;
     border: solid rgba(204, 187, 240, 0.8) 2px;
+    cursor: pointer;
 }
 span.pwf-category-span-selected{
     background: rgba(204, 187, 240, 0.3);
@@ -112,6 +114,7 @@ div.pwf-services-form button{
     padding: 7px 15px;
     display: block;
     margin: 40px auto 40px auto;
+    cursor: pointer;
 }
 p.pwf-new-service-error{
     color: var(--dark-red);

@@ -6,8 +6,8 @@ $suggestions = ['portrait', 'book cover design', 'flyer design', 'jingle writing
     <button id="pwf-services-search-submit" class="pwf-services-search-button pwf-search-button" data-preview="<?php echo !is_user_logged_in(); ?>">submit</button>
     <p id="pwf-search-term-error" class="hidden">The search term cannot have less than 3 letters.</p>
     <div id="pwf-services-search-results" class="pwf-search-results">
-        <p class="initial-message">Need something done? Use the power of community to find a trusted freelancer who can do it!</p>
-        <p class="initial-message">Want to offer your services? Join our cooperative!</p>
+        <p class="initial-message"><strong>Need something done? Use the power of community to find a trusted freelancer who can do it!</strong></p>
+        <p class="initial-message">Want to offer your services? <a href="<?php echo esc_url(site_url('/join')) ?>">Join our cooperative!</a></p>
         <p  class="initial-message">NOTE: this site is currently for DEMONSTRATION PURPOSES ONLY.</p>
     </div>
     <div class="pwf-load-more"></div>
