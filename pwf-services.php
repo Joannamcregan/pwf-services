@@ -54,7 +54,7 @@ class PWFServicesPlugin {
     function loadTemplate($template){
         if (is_page('Services')){
             return plugin_dir_path(__FILE__) . 'inc/template-services.php';
-        } else if (is_page('Requests')){
+        } else if (is_page('Service Requests')){
             return plugin_dir_path(__FILE__) . 'inc/template-requests.php';
         } else if (is_page('New Service')){
             return plugin_dir_path(__FILE__) . 'inc/template-new-service.php';
@@ -118,7 +118,7 @@ class PWFServicesPlugin {
             $this->addPage('Services');
         }
 
-        if (post_exists('Requests', '', '', 'page', 'publish') == 0){
+        if (post_exists('Service Requests', '', '', 'page', 'publish') == 0){
             $this->addPage('Requests');
         }
 
