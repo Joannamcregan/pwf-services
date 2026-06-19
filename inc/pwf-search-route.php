@@ -75,6 +75,24 @@ function getServices($data){
     $results = $wpdb->get_results($wpdb->prepare($query, $servicesTable, $serviceCategoriesTable, $categoriesTable, $usersTable, '%' . $wpdb->esc_like($searchTerm) . '%'), ARRAY_A);
     array_push($resultsArr, ...$results);
 
+    $query = 'SELECT services.id, services.servicename, services.servicedescription, services.priceballpark, services.timeframe, services.postedby, "category" as "found_in", users.display_name as "provider_name" FROM %i services 
+    JOIN %i serviceCategories ON services.ID = serviceCategories.serviceID
+    JOIN %i categories ON serviceCategories.categoryID = categories.id
+    JOIN %i users ON users.id = services.postedby
+    WHERE categories.category_name LIKE %s
+    AND isrequest = 0';
+    $results = $wpdb->get_results($wpdb->prepare($query, $servicesTable, $serviceCategoriesTable, $categoriesTable, $usersTable, '%' . $wpdb->esc_like($sTrimmedTerm) . '%'), ARRAY_A);
+    array_push($resultsArr, ...$results);
+
+    $query = 'SELECT services.id, services.servicename, services.servicedescription, services.priceballpark, services.timeframe, services.postedby, "category" as "found_in", users.display_name as "provider_name" FROM %i services 
+    JOIN %i serviceCategories ON services.ID = serviceCategories.serviceID
+    JOIN %i categories ON serviceCategories.categoryID = categories.id
+    JOIN %i users ON users.id = services.postedby
+    WHERE categories.category_name LIKE %s
+    AND isrequest = 0';
+    $results = $wpdb->get_results($wpdb->prepare($query, $servicesTable, $serviceCategoriesTable, $categoriesTable, $usersTable, '%' . $wpdb->esc_like($ingTrimmedTerm) . '%'), ARRAY_A);
+    array_push($resultsArr, ...$results);
+
     return $resultsArr;
 }
 
