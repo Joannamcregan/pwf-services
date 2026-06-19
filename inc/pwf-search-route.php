@@ -15,26 +15,66 @@ function pwfSearchRoute() {
 
 function getServices($data){
     $searchTerm = sanitize_text_field($data['searchTerm']);
+    $searchTerm = trim($searchTerm);
+    $sTrimmedTerm = rtrim($searchTerm, "s");
+    $ingTrimmedTerm = rtrim($searchTerm, "ing");
     global $wpdb;
     $servicesTable = $wpdb->prefix . "pwf_services";
-    $serviceTypesTable = $wpdb->prefix . "pwf_service_types";
+    $serviceCategoriesTable = $wpdb->prefix . "pwf_service_categories";
+    $categoriesTable = $wpdb->prefix . "pwf_categories";
     $usersTable = $wpdb->prefix . "users";
     $resultsArr = [];
     $query = 'SELECT services.id, services.servicename, services.servicedescription, services.priceballpark, services.timeframe, services.postedby, "title" as "found_in", users.display_name as "provider_name" FROM %i services 
-    JOIN %i types ON services.TYPEID = types.ID
     JOIN %i users ON users.id = services.postedby
     WHERE services.SERVICENAME LIKE %s
     AND isrequest = 0';
-    $results = $wpdb->get_results($wpdb->prepare($query, $servicesTable, $serviceTypesTable, $usersTable, '%' . $wpdb->esc_like($searchTerm) . '%'), ARRAY_A);
+    $results = $wpdb->get_results($wpdb->prepare($query, $servicesTable, $usersTable, '%' . $wpdb->esc_like($searchTerm) . '%'), ARRAY_A);
+    array_push($resultsArr, ...$results);
+    
+    $query = 'SELECT services.id, services.servicename, services.servicedescription, services.priceballpark, services.timeframe, services.postedby, "title" as "found_in", users.display_name as "provider_name" FROM %i services 
+    JOIN %i users ON users.id = services.postedby
+    WHERE services.SERVICENAME LIKE %s
+    AND isrequest = 0';
+    $results = $wpdb->get_results($wpdb->prepare($query, $servicesTable, $usersTable, '%' . $wpdb->esc_like($sTrimmedTerm) . '%'), ARRAY_A);
+    array_push($resultsArr, ...$results);
+    
+    $query = 'SELECT services.id, services.servicename, services.servicedescription, services.priceballpark, services.timeframe, services.postedby, "title" as "found_in", users.display_name as "provider_name" FROM %i services 
+    JOIN %i users ON users.id = services.postedby
+    WHERE services.SERVICENAME LIKE %s
+    AND isrequest = 0';
+    $results = $wpdb->get_results($wpdb->prepare($query, $servicesTable, $usersTable, '%' . $wpdb->esc_like($ingTrimmedTerm) . '%'), ARRAY_A);
     array_push($resultsArr, ...$results);
 
     $query = 'SELECT services.id, services.servicename, services.servicedescription, services.priceballpark, services.timeframe, services.postedby, "description" as "found_in", users.display_name as "provider_name" FROM %i services 
-    JOIN %i types ON services.TYPEID = types.ID
     JOIN %i users ON users.id = services.postedby
     WHERE services.SERVICEDESCRIPTION LIKE %s
     AND isrequest = 0';
-    $results = $wpdb->get_results($wpdb->prepare($query, $servicesTable, $serviceTypesTable, $usersTable, '%' . $wpdb->esc_like($searchTerm) . '%'), ARRAY_A);
+    $results = $wpdb->get_results($wpdb->prepare($query, $servicesTable, $usersTable, '%' . $wpdb->esc_like($searchTerm) . '%'), ARRAY_A);
     array_push($resultsArr, ...$results);
+    
+    $query = 'SELECT services.id, services.servicename, services.servicedescription, services.priceballpark, services.timeframe, services.postedby, "description" as "found_in", users.display_name as "provider_name" FROM %i services 
+    JOIN %i users ON users.id = services.postedby
+    WHERE services.SERVICEDESCRIPTION LIKE %s
+    AND isrequest = 0';
+    $results = $wpdb->get_results($wpdb->prepare($query, $servicesTable, $usersTable, '%' . $wpdb->esc_like($sTrimmedTerm) . '%'), ARRAY_A);
+    array_push($resultsArr, ...$results);
+
+    $query = 'SELECT services.id, services.servicename, services.servicedescription, services.priceballpark, services.timeframe, services.postedby, "description" as "found_in", users.display_name as "provider_name" FROM %i services 
+    JOIN %i users ON users.id = services.postedby
+    WHERE services.SERVICEDESCRIPTION LIKE %s
+    AND isrequest = 0';
+    $results = $wpdb->get_results($wpdb->prepare($query, $servicesTable, $usersTable, '%' . $wpdb->esc_like($ingTrimmedTerm) . '%'), ARRAY_A);
+    array_push($resultsArr, ...$results);
+
+    $query = 'SELECT services.id, services.servicename, services.servicedescription, services.priceballpark, services.timeframe, services.postedby, "category" as "found_in", users.display_name as "provider_name" FROM %i services 
+    JOIN %i serviceCategories ON services.ID = serviceCategories.serviceID
+    JOIN %i categories ON serviceCategories.categoryID = categories.id
+    JOIN %i users ON users.id = services.postedby
+    WHERE categories.category_name LIKE %s
+    AND isrequest = 0';
+    $results = $wpdb->get_results($wpdb->prepare($query, $servicesTable, $serviceCategoriesTable, $categoriesTable, $usersTable, '%' . $wpdb->esc_like($searchTerm) . '%'), ARRAY_A);
+    array_push($resultsArr, ...$results);
+
     return $resultsArr;
 }
 

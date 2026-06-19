@@ -92,24 +92,33 @@ class Search{
         this.alreadyAdded.push(this.resultsArr[i]['id']);
     }
     addResultBatch(resultsSection){
+        console.log('called');
         if (this.resultsArr.length <= parseInt(this.batchCounter, 10) + parseInt(this.batchInterval, 10)){
             for(let i = this.batchCounter; i < this.resultsArr.length; i++){
-                if (this.resultsArr[i]['found_in'] == 'title'){
+                console.log('if');
+                // if (this.resultsArr[i]['found_in'] == 'title'){
+                //     this.addResult(i, resultsSection);
+                // } else {
+                //     if ($.inArray(this.resultsArr[i]['id'], this.alreadyAdded) == -1){
+                //         this.addResult(i, resultsSection);
+                //     }
+                // }
+                if ($.inArray(this.resultsArr[i]['id'], this.alreadyAdded) == -1){
                     this.addResult(i, resultsSection);
-                } else {
-                    if ($.inArray(this.resultsArr[i]['id'], this.alreadyAdded) == -1){
-                        this.addResult(i, resultsSection);
-                    }
                 }
             }
         } else {
+            console.log('else');
             for(let i = this.batchCounter; i < parseInt(this.batchCounter, 10) + parseInt(this.batchInterval, 10); i++){
-                if (this.resultsArr[i]['found_in'] == 'title'){
+                // if (this.resultsArr[i]['found_in'] == 'title'){
+                //     this.addResult(i, resultsSection);
+                // } else {
+                //     if ($.inArray(this.resultsArr[i]['id'], this.alreadyAdded) == -1){
+                //         this.addResult(i, resultsSection);
+                //     }
+                // }
+                if ($.inArray(this.resultsArr[i]['id'], this.alreadyAdded) == -1){
                     this.addResult(i, resultsSection);
-                } else {
-                    if ($.inArray(this.resultsArr[i]['id'], this.alreadyAdded) == -1){
-                        this.addResult(i, resultsSection);
-                    }
                 }
             }
             this.moreResults = true;
