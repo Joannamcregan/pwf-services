@@ -8,7 +8,8 @@ $query = 'SELECT services.servicename, services.servicedescription, services.pri
     JOIN %i users ON users.id = services.postedby
     WHERE services.id = %d';
 $result = $wpdb->get_results($wpdb->prepare($query, $servicesTable, $usersTable, $service), ARRAY_A);
-if ($result){
+?><main>
+<?php if ($result){
     echo var_dump($result);
 } else {
     ?><div class="max-width-500  margin-y-60 centered-x">
@@ -16,4 +17,5 @@ if ($result){
         <p>Sorry, we can't find the service you're looking for. <a href="<?php echo esc_url(site_url()) ?>" class="no-wrap">Head home?</a></p>
     </div>
 <?php }
-get_footer();
+?></main>
+<?php get_footer();

@@ -85,9 +85,12 @@ class Search {
     return elementRect.bottom <= windowHeight + 100;
   }
   addResult(i, resultsSection) {
+    let siteRoot = window.location.origin;
     let resultDiv = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<div />').addClass('pwf-service-search-result').attr('tabindex', 0);
+    let resultA = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<a />').attr('href', siteRoot + '/service/?service=' + this.resultsArr[i]['id']);
     let resultTitle = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<h2 />').html(this.resultsArr[i]['servicename']);
-    resultDiv.append(resultTitle);
+    resultA.append(resultTitle);
+    resultDiv.append(resultA);
     let rawDescription = this.resultsArr[i]['servicedescription'];
     let trimmedDescription = rawDescription.substr(0, 500);
     trimmedDescription = trimmedDescription.length < rawDescription.length ? trimmedDescription.substr(0, Math.min(trimmedDescription.length, trimmedDescription.lastIndexOf(" "))) : trimmedDescription;
@@ -96,7 +99,6 @@ class Search {
     resultDiv.append(resultDescription);
     if (this.isPreview) {
       let loginP = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<p />').addClass('search-results-login');
-      let siteRoot = window.location.origin;
       let loginA = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<a />').attr('href', siteRoot + '/login').html('login for full details');
       loginP.append(loginA);
       resultDiv.append(loginP);
@@ -109,10 +111,8 @@ class Search {
     this.alreadyAdded.push(this.resultsArr[i]['id']);
   }
   addResultBatch(resultsSection) {
-    console.log('called');
     if (this.resultsArr.length <= parseInt(this.batchCounter, 10) + parseInt(this.batchInterval, 10)) {
       for (let i = this.batchCounter; i < this.resultsArr.length; i++) {
-        console.log('if');
         // if (this.resultsArr[i]['found_in'] == 'title'){
         //     this.addResult(i, resultsSection);
         // } else {
@@ -125,7 +125,6 @@ class Search {
         }
       }
     } else {
-      console.log('else');
       for (let i = this.batchCounter; i < parseInt(this.batchCounter, 10) + parseInt(this.batchInterval, 10); i++) {
         // if (this.resultsArr[i]['found_in'] == 'title'){
         //     this.addResult(i, resultsSection);
