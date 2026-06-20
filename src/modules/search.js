@@ -16,7 +16,6 @@ class Search{
         this.batchInterval = 3;
         this.batchCounter = 0;
         this.moreResults = false;
-        this.isPreview = true;
         window.onload = this.addBehavior();
     }
     events(){
@@ -29,7 +28,6 @@ class Search{
         })
     }
     browseRequests(e){
-        this.isPreview = ($(e.target).data('preview') > 0);
         this.alreadyAdded = [];
         this.batchCounter = 0;
         this.moreResults = false;
@@ -75,21 +73,19 @@ class Search{
         resultA.append(resultTitle);
         resultDiv.append(resultA);
         let rawDescription = this.resultsArr[i]['servicedescription'];
-        let trimmedDescription = rawDescription.substr(0, 500);
+        let trimmedDescription = rawDescription.substr(0, 200);
         trimmedDescription = trimmedDescription.length < rawDescription.length ? trimmedDescription.substr(0, Math.min(trimmedDescription.length, trimmedDescription.lastIndexOf(" "))) : trimmedDescription;
         trimmedDescription += trimmedDescription.length < rawDescription.length ? '...' : '';
         let resultDescription = $('<p />').html(trimmedDescription);
         resultDiv.append(resultDescription);
-        if (this.isPreview){
-            let loginP = $('<p />').addClass('search-results-login');
-            let loginA = $('<a />').attr('href', siteRoot + '/login').html('login for full details');
-            loginP.append(loginA);
-            resultDiv.append(loginP);
-        } else {
-            // append ballpark cost, time frame, and link to author page
-            let loginP = $('<p />').addClass('search-results-login').html('yay, you are logged in!');
-            resultDiv.append(loginP);
-        }
+        let ballparkStrong = $('<strong />').html('Ballpark pricing: ');
+        let ballparkEm = $('<em />').html(this.resultsArr[i]['priceballpark']);
+        let resultBallpark = $('<p />').append(ballparkStrong, ballparkEm);
+        resultDiv.append(resultBallpark);
+        let timeStrong = $('<strong />').html('Approximate time to complete: ');
+        let timeEm = $('<em />').html(this.resultsArr[i]['timeframe']);
+        let resultTimeframe = $('<p />').append(timeStrong, timeEm);
+        resultDiv.append(resultTimeframe);
         resultsSection.append(resultDiv);
         this.alreadyAdded.push(this.resultsArr[i]['id']);
     }
@@ -131,7 +127,6 @@ class Search{
         }
     }
     searchServices(){
-        this.isPreview = (this.servicesSearchSubmit.data('preview') > 0);
         this.alreadyAdded = [];
         this.batchCounter = 0;
         this.moreResults = false;

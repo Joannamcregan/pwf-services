@@ -33,7 +33,6 @@ class Search {
     this.batchInterval = 3;
     this.batchCounter = 0;
     this.moreResults = false;
-    this.isPreview = true;
     window.onload = this.addBehavior();
   }
   events() {
@@ -46,7 +45,6 @@ class Search {
     });
   }
   browseRequests(e) {
-    this.isPreview = jquery__WEBPACK_IMPORTED_MODULE_0___default()(e.target).data('preview') > 0;
     this.alreadyAdded = [];
     this.batchCounter = 0;
     this.moreResults = false;
@@ -92,21 +90,19 @@ class Search {
     resultA.append(resultTitle);
     resultDiv.append(resultA);
     let rawDescription = this.resultsArr[i]['servicedescription'];
-    let trimmedDescription = rawDescription.substr(0, 500);
+    let trimmedDescription = rawDescription.substr(0, 200);
     trimmedDescription = trimmedDescription.length < rawDescription.length ? trimmedDescription.substr(0, Math.min(trimmedDescription.length, trimmedDescription.lastIndexOf(" "))) : trimmedDescription;
     trimmedDescription += trimmedDescription.length < rawDescription.length ? '...' : '';
     let resultDescription = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<p />').html(trimmedDescription);
     resultDiv.append(resultDescription);
-    if (this.isPreview) {
-      let loginP = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<p />').addClass('search-results-login');
-      let loginA = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<a />').attr('href', siteRoot + '/login').html('login for full details');
-      loginP.append(loginA);
-      resultDiv.append(loginP);
-    } else {
-      // append ballpark cost, time frame, and link to author page
-      let loginP = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<p />').addClass('search-results-login').html('yay, you are logged in!');
-      resultDiv.append(loginP);
-    }
+    let ballparkStrong = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<strong />').html('Ballpark pricing: ');
+    let ballparkEm = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<em />').html(this.resultsArr[i]['priceballpark']);
+    let resultBallpark = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<p />').append(ballparkStrong, ballparkEm);
+    resultDiv.append(resultBallpark);
+    let timeStrong = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<strong />').html('Approximate time to complete: ');
+    let timeEm = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<em />').html(this.resultsArr[i]['timeframe']);
+    let resultTimeframe = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<p />').append(timeStrong, timeEm);
+    resultDiv.append(resultTimeframe);
     resultsSection.append(resultDiv);
     this.alreadyAdded.push(this.resultsArr[i]['id']);
   }
@@ -148,7 +144,6 @@ class Search {
     }
   };
   searchServices() {
-    this.isPreview = this.servicesSearchSubmit.data('preview') > 0;
     this.alreadyAdded = [];
     this.batchCounter = 0;
     this.moreResults = false;
