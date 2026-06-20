@@ -24,7 +24,8 @@ class PWFServicesPlugin {
         // ));
         add_action('activate_pwf-services/pwf-services.php', array($this, 'onActivate'));
         add_action('init', array($this, 'registerScripts'));
-        add_action('wp_enqueue_scripts', array($this, 'pluginFiles'));
+        add_action('init', array($this, 'pwf_rewrite_tag'));
+        add_action('wp_enqueue_scripts', array($this, 'pluginFiles'), 10, 0);
         add_filter('template_include', array($this, 'loadTemplate'), 99);
     }
 
@@ -60,6 +61,8 @@ class PWFServicesPlugin {
             return plugin_dir_path(__FILE__) . 'inc/template-new-service.php';
         } else if (is_page('New Request')){
             return plugin_dir_path(__FILE__) . 'inc/template-new-request.php';
+        } else if (is_page('Service')){
+            return plugin_dir_path(__FILE__) . 'inc/template-service.php';
         } else {
             return $template;
         }
@@ -118,6 +121,10 @@ class PWFServicesPlugin {
             $this->addPage('Services');
         }
 
+        if (post_exists('Service', '', '', 'page', 'publish') == 0){
+            $this->addPage('Service');
+        }
+
         if (post_exists('Service Requests', '', '', 'page', 'publish') == 0){
             $this->addPage('Requests');
         }
@@ -129,6 +136,10 @@ class PWFServicesPlugin {
         if (post_exists('New Request', '', '', 'page', 'publish') == 0){
             $this->addPage('New Request');
         }
+    }
+
+    function pwf_rewrite_tag() {
+        add_rewrite_tag('%service%', '([^&]+)');
     }
 }
 $pwfServices = new PWFServicesPlugin();
