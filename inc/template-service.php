@@ -18,9 +18,10 @@ $result = $wpdb->get_results($wpdb->prepare($query, $servicesTable, $usersTable,
         <div class="single-service-subsection">
             <p><strong>Posted on: </strong><em><?php echo date('m/d/Y', strtotime($result[0]['createdate'])); ?></em></p>
             <?php if (is_user_logged_in()){
-                ?><p><strong>Provider: </strong><em><?php echo $result[0]['provider_name']; ?></em></p>
-            <?php } else {
-                ?><p>Only logged in members can view information about <?php echo $result[0]['isrequest'] == 0 ? 'service providers' : 'clients'; ?>.</p>
+                ?><p><strong>Posted by: </strong><em><?php echo $result[0]['provider_name']; ?></em></p>
+            <?php } else {                
+                ?><p><strong>Posted by:</strong></p>
+                <p>Only logged in members can view information about <?php echo $result[0]['isrequest'] == 0 ? 'service providers' : 'clients'; ?>.</p>
                 <p>Already a member? <a href="<?php echo esc_url(site_url('/login')); ?>">Login.</a></p>
                 <p>Not a member yet? <a href="<?php echo esc_url(site_url('/join')); ?>">Join the cooperative!</a></p>
             <?php }
