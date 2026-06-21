@@ -4,7 +4,7 @@ global $wpdb;
 $servicesTable = $wpdb->prefix . "pwf_services";
 $usersTable = $wpdb->prefix . "users";
 $service = $wp_query->query_vars['service'];
-$query = 'SELECT services.servicename, services.servicedescription, services.priceballpark, services.timeframe, users.display_name as "provider_name", isrequest FROM %i services 
+$query = 'SELECT services.servicename, services.servicedescription, services.priceballpark, services.timeframe, users.display_name as "provider_name", services.isrequest, services.createdate FROM %i services 
     JOIN %i users ON users.id = services.postedby
     WHERE services.id = %d';
 $result = $wpdb->get_results($wpdb->prepare($query, $servicesTable, $usersTable, $service), ARRAY_A);
@@ -15,7 +15,8 @@ $result = $wpdb->get_results($wpdb->prepare($query, $servicesTable, $usersTable,
         <p><?php echo $result[0]['servicedescription']; ?></p>
         <p><strong><?php echo $result[0]['isrequest'] == 0 ? 'Ballpark pricing: ' : 'Ballpark budget: '; ?></strong><em><?php echo $result[0]['priceballpark']; ?></em></p>
         <p><strong><?php echo $result[0]['isrequest'] == 0 ? 'Estimated time to complete: ' : 'Needed by: '; ?></strong><em><?php echo $result[0]['timeframe']; ?></em></p>
-        <div class="single-service-provider-section">
+        <div class="single-service-subsection">
+            <p><strong>Posted on: </strong><em><?php echo date('m/d/Y', strtotime($result[0]['createdate'])); ?></em></p>
             <?php if (is_user_logged_in()){
                 ?><p><strong>Provider: </strong><em><?php echo $result[0]['provider_name']; ?></em></p>
             <?php } else {
