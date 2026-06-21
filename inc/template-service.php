@@ -20,8 +20,8 @@ $result = $wpdb->get_results($wpdb->prepare($query, $servicesTable, $usersTable,
                 ?><p><strong>Provider: </strong><em><?php echo $result[0]['provider_name']; ?></em></p>
             <?php } else {
                 ?><p>Only logged in members can view information about service providers.</p>
-                <p>Already a member? <a>Login.</a></p>
-                <p>Not a member yet? <a>Join the cooperative!</a></p>
+                <p>Already a member? <a href="<?php echo esc_url(site_url('/login')); ?>">Login.</a></p>
+                <p>Not a member yet? <a href="<?php echo esc_url(site_url('/join')); ?>">Join the cooperative!</a></p>
             <?php }
         ?></div>
     <?php } else {
