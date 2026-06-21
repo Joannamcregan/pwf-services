@@ -140,6 +140,7 @@ class PWFServicesPlugin {
 
     function pwf_rewrite_tag() {
         add_rewrite_tag('%service%', '([^&]+)');
+        add_rewrite_tag('%request%', '([^&]+)');
     }
 }
 $pwfServices = new PWFServicesPlugin();

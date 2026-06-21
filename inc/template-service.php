@@ -4,7 +4,7 @@ global $wpdb;
 $servicesTable = $wpdb->prefix . "pwf_services";
 $usersTable = $wpdb->prefix . "users";
 $service = $wp_query->query_vars['service'];
-$query = 'SELECT services.servicename, services.servicedescription, services.priceballpark, services.timeframe, users.display_name as "provider_name" FROM %i services 
+$query = 'SELECT services.servicename, services.servicedescription, services.priceballpark, services.timeframe, users.display_name as "provider_name", isrequest FROM %i services 
     JOIN %i users ON users.id = services.postedby
     WHERE services.id = %d';
 $result = $wpdb->get_results($wpdb->prepare($query, $servicesTable, $usersTable, $service), ARRAY_A);
@@ -13,13 +13,13 @@ $result = $wpdb->get_results($wpdb->prepare($query, $servicesTable, $usersTable,
     <?php if ($result){
         ?><h1><?php echo $result[0]['servicename']; ?></h1>
         <p><?php echo $result[0]['servicedescription']; ?></p>
-        <p><strong>Ballpark pricing: </strong><em><?php echo $result[0]['priceballpark']; ?></em></p>
-        <p><strong>Estimated time to complete: </strong><em><?php echo $result[0]['timeframe']; ?></em></p>
+        <p><strong><?php echo $result[0]['isrequest'] == 0 ? 'Ballpark pricing: ' : 'Ballpark budget: '; ?></strong><em><?php echo $result[0]['priceballpark']; ?></em></p>
+        <p><strong><?php echo $result[0]['isrequest'] == 0 ? 'Estimated time to complete: ' : 'Needed by: '; ?></strong><em><?php echo $result[0]['timeframe']; ?></em></p>
         <div class="single-service-provider-section">
             <?php if (is_user_logged_in()){
                 ?><p><strong>Provider: </strong><em><?php echo $result[0]['provider_name']; ?></em></p>
             <?php } else {
-                ?><p>Only logged in members can view information about service providers.</p>
+                ?><p>Only logged in members can view information about <?php echo $result[0]['isrequest'] == 0 ? 'service providers' : 'clients'; ?>.</p>
                 <p>Already a member? <a href="<?php echo esc_url(site_url('/login')); ?>">Login.</a></p>
                 <p>Not a member yet? <a href="<?php echo esc_url(site_url('/join')); ?>">Join the cooperative!</a></p>
             <?php }
