@@ -11,7 +11,13 @@ function pwfSubmitRoute() {
 
 function addService($data) {
     $serviceName = sanitize_text_field($data['serviceName']);
-    $serviceDescription = sanitize_text_field($data['serviceDescription']);
+    $allowedHTML = array(
+        'p' => array(),
+        'br' => array(),
+        'em' => array(),
+        'strong' => array(),
+    );
+    $serviceDescription = wp_kses(nl2br($data['serviceDescription']), $allowedHTML);
     $servicePrice = sanitize_text_field($data['servicePrice']);
     $serviceTimeframe = sanitize_text_field($data['serviceTimeframe']);
     $serviceType = sanitize_text_field($data['serviceType']);
