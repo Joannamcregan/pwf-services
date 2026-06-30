@@ -21,7 +21,7 @@ $result = $wpdb->get_results($wpdb->prepare($query, $servicesTable, $usersTable,
                 ?><p><strong>Posted by: </strong><em><?php echo $result[0]['provider_name']; ?></em></p>
             <?php } else {                
                 ?><p><strong>Posted by:</strong></p>
-                <p>Only logged in members can view the names and contact information of <?php echo $result[0]['isrequest'] == 0 ? 'service providers' : 'clients'; ?>.</p>
+                <p>Only logged in members can view the names, reviews, and contact information of <?php echo $result[0]['isrequest'] == 0 ? 'service providers' : 'clients'; ?>.</p>
                 <p>Already a member? <a href="<?php echo esc_url(site_url('/login')); ?>">Login.</a></p>
                 <p>Not a member yet? <a href="<?php echo esc_url(site_url('/join')); ?>">Join the cooperative!</a></p>
             <?php }

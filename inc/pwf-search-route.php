@@ -17,7 +17,7 @@ function getServices($data){
     $searchTerm = sanitize_text_field($data['searchTerm']);
     $searchTerm = trim($searchTerm);
     $sTrimmedTerm = rtrim($searchTerm, "s");
-    $ingTrimmedTerm = rtrim($searchTerm, "ing");
+    $ingTrimmedTerm = str_contains($searchTerm, 'ing') ? rtrim($searchTerm, "ing") : $searchTerm;
     global $wpdb;
     $servicesTable = $wpdb->prefix . "pwf_services";
     $serviceCategoriesTable = $wpdb->prefix . "pwf_service_categories";
