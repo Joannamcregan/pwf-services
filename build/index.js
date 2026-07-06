@@ -20,13 +20,13 @@ __webpack_require__.r(__webpack_exports__);
 
 class Search {
   constructor() {
-    this.servicesSearchField = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-services-search-field');
-    this.servicesSearchSubmit = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-services-search-submit');
-    this.servicesResultsSection = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-services-search-results');
-    this.servicesSearchTermError = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-search-term-error');
-    this.loadMoreDiv = jquery__WEBPACK_IMPORTED_MODULE_0___default()('.pwf-load-more');
-    this.categorySpans = jquery__WEBPACK_IMPORTED_MODULE_0___default()('.pwf-category-span');
-    this.requestsResultsSection = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-requests-search-results');
+    this.servicesSearchField = jquery__WEBPACK_IMPORTED_MODULE_0___default()("#pwf-services-search-field");
+    this.servicesSearchSubmit = jquery__WEBPACK_IMPORTED_MODULE_0___default()("#pwf-services-search-submit");
+    this.servicesResultsSection = jquery__WEBPACK_IMPORTED_MODULE_0___default()("#pwf-services-search-results");
+    this.servicesSearchTermError = jquery__WEBPACK_IMPORTED_MODULE_0___default()("#pwf-search-term-error");
+    this.loadMoreDiv = jquery__WEBPACK_IMPORTED_MODULE_0___default()(".pwf-load-more");
+    this.categorySpans = jquery__WEBPACK_IMPORTED_MODULE_0___default()(".pwf-category-span");
+    this.requestsResultsSection = jquery__WEBPACK_IMPORTED_MODULE_0___default()("#pwf-requests-search-results");
     this.events();
     this.resultsArr;
     this.alreadyAdded = [];
@@ -36,10 +36,10 @@ class Search {
     window.onload = this.addBehavior();
   }
   events() {
-    this.servicesSearchSubmit.on('click', this.searchServices.bind(this));
-    this.categorySpans.on('click', this.browseRequests.bind(this));
-    this.categorySpans.on('keypress', e => {
-      if (e.key === 'Enter') {
+    this.servicesSearchSubmit.on("click", this.searchServices.bind(this));
+    this.categorySpans.on("click", this.browseRequests.bind(this));
+    this.categorySpans.on("keypress", e => {
+      if (e.key === "Enter") {
         this.browseRequests(e);
       }
     });
@@ -48,29 +48,32 @@ class Search {
     this.alreadyAdded = [];
     this.batchCounter = 0;
     this.moreResults = false;
-    this.categorySpans.removeClass('pwf-category-span-selected');
+    this.categorySpans.removeClass("pwf-category-span-selected");
     this.categorySpans.each(function () {
-      jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).attr('aria-label', jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).text() + ' is not selected');
+      jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).attr("aria-label", jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).text() + " is not selected");
     });
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(e.target).addClass('pwf-category-span-selected');
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(e.target).attr('aria-label', jquery__WEBPACK_IMPORTED_MODULE_0___default()(e.target).text() + ' is selected');
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()(e.target).addClass("pwf-category-span-selected");
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()(e.target).attr("aria-label", jquery__WEBPACK_IMPORTED_MODULE_0___default()(e.target).text() + " is selected");
     jquery__WEBPACK_IMPORTED_MODULE_0___default().ajax({
       beforeSend: xhr => {
-        xhr.setRequestHeader('X-WP-Nonce', pwfData.nonce);
+        xhr.setRequestHeader("X-WP-Nonce", pwfData.nonce);
       },
-      url: pwfData.root_url + '/wp-json/pwfSearch/v1/requestBrowse',
-      type: 'GET',
+      url: pwfData.root_url + "/wp-json/pwfSearch/v1/requestBrowse",
+      type: "GET",
       data: {
-        'categoryId': jquery__WEBPACK_IMPORTED_MODULE_0___default()(e.target).data('id')
+        categoryId: jquery__WEBPACK_IMPORTED_MODULE_0___default()(e.target).data("id")
       },
       success: response => {
         this.resultsArr = response;
         if (this.resultsArr.length < 1) {
           this.requestsResultsSection.html("<p class='initial-message'>Sorry! We couldn't find any matching results.</p>");
         } else {
-          this.requestsResultsSection.html('');
+          this.requestsResultsSection.html("");
           this.addResultBatch(this.requestsResultsSection);
         }
+        jquery__WEBPACK_IMPORTED_MODULE_0___default()([document.documentElement, document.body]).animate({
+          scrollTop: this.requestsResultsSection.offset().top
+        }, 1000);
       },
       error: response => {
         // console.log(response);
@@ -84,27 +87,27 @@ class Search {
   }
   addResult(i, resultsSection) {
     let siteRoot = window.location.origin;
-    let resultDiv = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<div />').addClass('pwf-service-search-result').attr('tabindex', 0);
-    let resultA = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<a />').attr('href', siteRoot + '/service/?service=' + this.resultsArr[i]['id']);
-    let resultTitle = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<h2 />').html(this.resultsArr[i]['servicename']);
+    let resultDiv = jquery__WEBPACK_IMPORTED_MODULE_0___default()("<div />").addClass("pwf-service-search-result").attr("tabindex", 0);
+    let resultA = jquery__WEBPACK_IMPORTED_MODULE_0___default()("<a />").attr("href", siteRoot + "/service/?service=" + this.resultsArr[i]["id"]);
+    let resultTitle = jquery__WEBPACK_IMPORTED_MODULE_0___default()("<h2 />").html(this.resultsArr[i]["servicename"]);
     resultA.append(resultTitle);
     resultDiv.append(resultA);
-    let rawDescription = this.resultsArr[i]['servicedescription'];
+    let rawDescription = this.resultsArr[i]["servicedescription"];
     let trimmedDescription = rawDescription.substr(0, 200);
     trimmedDescription = trimmedDescription.length < rawDescription.length ? trimmedDescription.substr(0, Math.min(trimmedDescription.length, trimmedDescription.lastIndexOf(" "))) : trimmedDescription;
-    trimmedDescription += trimmedDescription.length < rawDescription.length ? '...' : '';
-    let resultDescription = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<p />').html(trimmedDescription);
+    trimmedDescription += trimmedDescription.length < rawDescription.length ? "..." : "";
+    let resultDescription = jquery__WEBPACK_IMPORTED_MODULE_0___default()("<p />").html(trimmedDescription);
     resultDiv.append(resultDescription);
-    let ballparkStrong = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<strong />').html('Ballpark pricing: ');
-    let ballparkEm = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<em />').html(this.resultsArr[i]['priceballpark']);
-    let resultBallpark = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<p />').append(ballparkStrong, ballparkEm);
+    let ballparkStrong = jquery__WEBPACK_IMPORTED_MODULE_0___default()("<strong />").html("Ballpark pricing: ");
+    let ballparkEm = jquery__WEBPACK_IMPORTED_MODULE_0___default()("<em />").html(this.resultsArr[i]["priceballpark"]);
+    let resultBallpark = jquery__WEBPACK_IMPORTED_MODULE_0___default()("<p />").append(ballparkStrong, ballparkEm);
     resultDiv.append(resultBallpark);
-    let timeStrong = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<strong />').html('Approximate time to complete: ');
-    let timeEm = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<em />').html(this.resultsArr[i]['timeframe']);
-    let resultTimeframe = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<p />').append(timeStrong, timeEm);
+    let timeStrong = jquery__WEBPACK_IMPORTED_MODULE_0___default()("<strong />").html("Approximate time to complete: ");
+    let timeEm = jquery__WEBPACK_IMPORTED_MODULE_0___default()("<em />").html(this.resultsArr[i]["timeframe"]);
+    let resultTimeframe = jquery__WEBPACK_IMPORTED_MODULE_0___default()("<p />").append(timeStrong, timeEm);
     resultDiv.append(resultTimeframe);
     resultsSection.append(resultDiv);
-    this.alreadyAdded.push(this.resultsArr[i]['id']);
+    this.alreadyAdded.push(this.resultsArr[i]["id"]);
   }
   addResultBatch(resultsSection) {
     if (this.resultsArr.length <= parseInt(this.batchCounter, 10) + parseInt(this.batchInterval, 10)) {
@@ -116,7 +119,7 @@ class Search {
         //         this.addResult(i, resultsSection);
         //     }
         // }
-        if (jquery__WEBPACK_IMPORTED_MODULE_0___default().inArray(this.resultsArr[i]['id'], this.alreadyAdded) == -1) {
+        if (jquery__WEBPACK_IMPORTED_MODULE_0___default().inArray(this.resultsArr[i]["id"], this.alreadyAdded) == -1) {
           this.addResult(i, resultsSection);
         }
       }
@@ -129,7 +132,7 @@ class Search {
         //         this.addResult(i, resultsSection);
         //     }
         // }
-        if (jquery__WEBPACK_IMPORTED_MODULE_0___default().inArray(this.resultsArr[i]['id'], this.alreadyAdded) == -1) {
+        if (jquery__WEBPACK_IMPORTED_MODULE_0___default().inArray(this.resultsArr[i]["id"], this.alreadyAdded) == -1) {
           this.addResult(i, resultsSection);
         }
       }
@@ -140,7 +143,7 @@ class Search {
   loadMoreResults = () => {
     if (this.elementInView(this.loadMoreDiv) && this.moreResults == true) {
       this.moreResults = false;
-      this.addResultBatch(this.loadMoreDiv.closest('main').find('.pwf-search-results'));
+      this.addResultBatch(this.loadMoreDiv.closest("main").find(".pwf-search-results"));
     }
   };
   searchServices() {
@@ -148,29 +151,29 @@ class Search {
     this.batchCounter = 0;
     this.moreResults = false;
     let searchTerm = this.servicesSearchField.val();
-    this.servicesSearchTermError.addClass('hidden');
+    this.servicesSearchTermError.addClass("hidden");
     if (searchTerm.length == 0) {
-      searchTerm = this.servicesSearchField.attr('placeholder');
+      searchTerm = this.servicesSearchField.attr("placeholder");
     }
     if (searchTerm.length < 3) {
-      this.servicesSearchTermError.removeClass('hidden');
+      this.servicesSearchTermError.removeClass("hidden");
     } else {
-      this.servicesResultsSection.html('');
+      this.servicesResultsSection.html("");
       jquery__WEBPACK_IMPORTED_MODULE_0___default().ajax({
         beforeSend: xhr => {
-          xhr.setRequestHeader('X-WP-Nonce', pwfData.nonce);
+          xhr.setRequestHeader("X-WP-Nonce", pwfData.nonce);
         },
-        url: pwfData.root_url + '/wp-json/pwfSearch/v1/serviceSearch',
-        type: 'GET',
+        url: pwfData.root_url + "/wp-json/pwfSearch/v1/serviceSearch",
+        type: "GET",
         data: {
-          'searchTerm': searchTerm
+          searchTerm: searchTerm
         },
         success: response => {
           this.resultsArr = response;
           if (this.resultsArr.length < 1) {
             this.servicesResultsSection.html("<p class='initial-message'>Sorry! We couldn't find any matching results.</p>");
           } else {
-            this.servicesResultsSection.html('');
+            this.servicesResultsSection.html("");
             this.addResultBatch(this.servicesResultsSection);
           }
         },
@@ -181,7 +184,7 @@ class Search {
     }
   }
   addBehavior() {
-    let searchFields = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#pwf-services-search-field');
+    let searchFields = jquery__WEBPACK_IMPORTED_MODULE_0___default()("#pwf-services-search-field");
     searchFields.each(() => {
       window.addEventListener("scroll", () => {
         this.loadMoreResults();
